@@ -8,6 +8,8 @@ func HandleCommand(command string, args []string) (string, error) {
 		return Echo(args)
 	case consts.EXIT:
 		return Exit(args)
+	case consts.TYPE:
+		return Type(args)
 	default:
 		return NotFound(command)
 	}
