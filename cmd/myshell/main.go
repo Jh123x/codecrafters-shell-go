@@ -17,12 +17,11 @@ func main() {
 			fmt.Println("Error reading command")
 		}
 
-		if cmd == consts.EXIT {
-			return
-		}
-
 		// Handle Command
 		output, err := command.HandleCommand(cmd, args)
+		if err == consts.ErrEXIT {
+			return
+		}
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
