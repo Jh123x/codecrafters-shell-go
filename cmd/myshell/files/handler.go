@@ -10,6 +10,13 @@ import (
 )
 
 func GetFilePath(filename string) (string, error) {
+	if path.IsAbs(filename) {
+		return filename, nil
+	}
+	return ParseRelativePath(filename)
+}
+
+func ParseRelativePath(filename string) (string, error) {
 	envPaths := os.Getenv(consts.ENV_PATH)
 	if len(envPaths) == 0 {
 		return "", consts.ErrEnvPathNotSet
