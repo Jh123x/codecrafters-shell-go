@@ -14,15 +14,15 @@ func TestEcho(t *testing.T) {
 	}{
 		"no args": {
 			args:           []string{},
-			expectedOutput: "",
+			expectedOutput: "\n",
 		},
 		"single arg": {
 			args:           []string{"hello"},
-			expectedOutput: "hello",
+			expectedOutput: "hello\n",
 		},
 		"multiple args": {
 			args:           []string{"hello", "world!"},
-			expectedOutput: "hello world!",
+			expectedOutput: "hello world!\n",
 		},
 	}
 

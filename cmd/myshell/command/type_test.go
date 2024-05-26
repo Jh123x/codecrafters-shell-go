@@ -22,12 +22,12 @@ func TestType(t *testing.T) {
 		},
 		"builtin command": {
 			args:           []string{consts.EXIT},
-			expectedOutput: "exit is a shell builtin",
+			expectedOutput: "exit is a shell builtin\n",
 		},
 		"unknown command": {
 			args:           []string{"unknown"},
 			expectedOutput: "",
-			expectedErr:    errors.New("unknown not found"),
+			expectedErr:    errors.New("unknown not found\n"),
 		},
 	}
 

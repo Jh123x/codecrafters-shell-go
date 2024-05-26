@@ -17,15 +17,15 @@ func TestHandler(t *testing.T) {
 		expectedErr    error
 	}{
 		"not found": {
-			command:        "test",
+			command:        "test_not_found",
 			args:           []string{"should", "be", "ignored"},
 			expectedOutput: "",
-			expectedErr:    fmt.Errorf("test: command not found"),
+			expectedErr:    fmt.Errorf("test_not_found: command not found"),
 		},
 		"echo": {
 			command:        consts.ECHO,
 			args:           []string{"hello", "world"},
-			expectedOutput: "hello world",
+			expectedOutput: "hello world\n",
 		},
 		"exit": {
 			command:        consts.EXIT,
@@ -36,7 +36,7 @@ func TestHandler(t *testing.T) {
 		"type": {
 			command:        consts.TYPE,
 			args:           []string{"exit"},
-			expectedOutput: "exit is a shell builtin",
+			expectedOutput: "exit is a shell builtin\n",
 		},
 		"type no args": {
 			command:        consts.TYPE,

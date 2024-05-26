@@ -14,9 +14,9 @@ const (
 
 var (
 	TypeMap = map[string]string{
-		EXIT: "exit is a shell builtin",
-		ECHO: "echo is a shell builtin",
-		TYPE: "type is a shell builtin",
+		EXIT: "exit is a shell builtin\n",
+		ECHO: "echo is a shell builtin\n",
+		TYPE: "type is a shell builtin\n",
 	}
 )
 

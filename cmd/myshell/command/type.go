@@ -19,8 +19,8 @@ func Type(args []string) (string, error) {
 	}
 
 	if absPath, err := files.GetFilePath(typeArg); err == nil {
-		return fmt.Sprintf("%s is %s", typeArg, absPath), nil
+		return fmt.Sprintf("%s is %s\n", typeArg, absPath), nil
 	}
 
-	return "", fmt.Errorf("%s not found", typeArg)
+	return "", fmt.Errorf("%s not found\n", typeArg)
 }

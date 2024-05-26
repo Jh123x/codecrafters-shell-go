@@ -27,6 +27,6 @@ func main() {
 			continue
 		}
 
-		fmt.Println(output)
+		fmt.Print(output)
 	}
 }
