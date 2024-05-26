@@ -1,15 +1,13 @@
 package command
 
 import (
-	"fmt"
-	"io"
+	"errors"
+	"strings"
 )
 
-func NotFound(reader io.Writer, command string) error {
-	_, err := fmt.Fprintf(reader, "%s: command not found", command)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func NotFound(command string) (string, error) {
+	builder := strings.Builder{}
+	builder.WriteString(command)
+	builder.WriteString(": command not found")
+	return "", errors.New(builder.String())
 }

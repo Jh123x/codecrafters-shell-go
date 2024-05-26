@@ -1,26 +1,29 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/command"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
 )
 
 func main() {
 	// Uncomment this block to pass the first stage
-	fmt.Fprint(os.Stdout, "$ ")
+	fmt.Print("$ ")
 
-	// Wait for user input
-	commandStr, err := bufio.NewReader(os.Stdin).ReadString('\n')
-
-	// Handle Command
+	// Wait and parse user input
+	cmd, args, err := parser.ParseFromReader(os.Stdin)
 	if err != nil {
 		fmt.Println("Error reading command")
 	}
 
-	if err := command.HandleCommand(os.Stdout, commandStr, nil); err != nil {
-		fmt.Print("error handling command: ", err)
+	// Handle Command
+	output, err := command.HandleCommand(cmd, args)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
 	}
+
+	fmt.Println(output)
 }
