@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/files"
 )
 
 func Type(args []string) (string, error) {
@@ -11,11 +12,15 @@ func Type(args []string) (string, error) {
 		return "", consts.ErrTypeUsage
 	}
 
-	commandType := args[0]
-	helpMsg, ok := consts.TypeMap[commandType]
-	if !ok {
-		return "", fmt.Errorf("%s not found", commandType)
+	typeArg := args[0]
+	helpMsg, ok := consts.TypeMap[typeArg]
+	if ok {
+		return helpMsg, nil
 	}
 
-	return helpMsg, nil
+	if absPath, err := files.GetFilePath(typeArg); err == nil {
+		return fmt.Sprintf("%s is %s", typeArg, absPath), nil
+	}
+
+	return "", fmt.Errorf("%s not found", typeArg)
 }

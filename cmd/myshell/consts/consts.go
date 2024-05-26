@@ -3,9 +3,13 @@ package consts
 import "errors"
 
 const (
+	// Commands
 	EXIT = "exit"
 	ECHO = "echo"
 	TYPE = "type"
+
+	// Environment variables
+	ENV_PATH = "PATH"
 )
 
 var (
@@ -17,6 +21,8 @@ var (
 )
 
 var (
-	ErrEXIT      = errors.New("exit")
-	ErrTypeUsage = errors.New("usage: type <command>")
+	ErrEXIT          = errors.New("exit")
+	ErrTypeUsage     = errors.New("usage: type <command>")
+	ErrEnvPathNotSet = errors.New("environment variable PATH not set")
+	ErrFileNotFound  = errors.New("file not found")
 )
