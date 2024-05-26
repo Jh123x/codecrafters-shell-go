@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,6 +21,28 @@ func TestHandler(t *testing.T) {
 			args:           []string{"should", "be", "ignored"},
 			expectedOutput: "",
 			expectedErr:    fmt.Errorf("test: command not found"),
+		},
+		"echo": {
+			command:        consts.ECHO,
+			args:           []string{"hello", "world"},
+			expectedOutput: "hello world",
+		},
+		"exit": {
+			command:        consts.EXIT,
+			args:           []string{"0"},
+			expectedOutput: "",
+			expectedErr:    consts.ErrEXIT,
+		},
+		"type": {
+			command:        consts.TYPE,
+			args:           []string{"exit"},
+			expectedOutput: "exit is a shell builtin",
+		},
+		"type no args": {
+			command:        consts.TYPE,
+			args:           []string{},
+			expectedOutput: "",
+			expectedErr:    consts.ErrTypeUsage,
 		},
 	}
 
