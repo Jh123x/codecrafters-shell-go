@@ -11,6 +11,6 @@ func HandleCommand(command string, args []string) (string, error) {
 	case consts.TYPE:
 		return Type(args)
 	default:
-		return NotFound(command)
+		return DefaultCommand(command, args)
 	}
 }

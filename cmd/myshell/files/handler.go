@@ -2,6 +2,7 @@ package files
 
 import (
 	"os"
+	"os/exec"
 	"path"
 	"strings"
 
@@ -23,4 +24,14 @@ func GetFilePath(filename string) (string, error) {
 		return filePath, nil
 	}
 	return "", consts.ErrFileNotFound
+}
+
+func RunFile(absFilePath string, args []string) (string, error) {
+	cmd := exec.Command(absFilePath, args...)
+	stdout, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+
+	return string(stdout), nil
 }
