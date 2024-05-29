@@ -12,6 +12,7 @@ const (
 
 	// Environment variables
 	ENV_PATH = "PATH"
+	ENV_HOME = "HOME"
 )
 
 type empty struct{}

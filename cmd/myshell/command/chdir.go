@@ -13,6 +13,10 @@ func ChangeDir(args []string) (string, error) {
 	}
 
 	dir := args[0]
+	if dir == "~" {
+		dir = os.Getenv(consts.ENV_HOME)
+	}
+
 	if err := os.Chdir(dir); err != nil {
 		return "", fmt.Errorf("cd: %s: No such file or directory", dir)
 	}

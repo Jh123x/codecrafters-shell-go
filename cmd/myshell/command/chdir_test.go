@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -12,6 +13,8 @@ import (
 
 func TestChdir(t *testing.T) {
 	oldDir, _ := os.Getwd()
+	homeDir := filepath.Join(oldDir, "..", "parser")
+	os.Setenv(consts.ENV_HOME, homeDir)
 
 	tests := map[string]struct {
 		args        []string
@@ -35,6 +38,10 @@ func TestChdir(t *testing.T) {
 		"current dir": {
 			args:        []string{"."},
 			expectedDir: oldDir,
+		},
+		"home dir": {
+			args:        []string{"~"},
+			expectedDir: homeDir,
 		},
 	}
 	for name, tc := range tests {
