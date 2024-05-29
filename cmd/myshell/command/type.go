@@ -13,9 +13,8 @@ func Type(args []string) (string, error) {
 	}
 
 	typeArg := args[0]
-	helpMsg, ok := consts.TypeMap[typeArg]
-	if ok {
-		return helpMsg, nil
+	if _, ok := consts.TypeMap[typeArg]; ok {
+		return fmt.Sprintf("%s is a shell builtin\n", typeArg), nil
 	}
 
 	if absPath, err := files.GetFilePath(typeArg); err == nil {

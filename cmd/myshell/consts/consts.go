@@ -13,11 +13,14 @@ const (
 	ENV_PATH = "PATH"
 )
 
+type empty struct{}
+
 var (
-	TypeMap = map[string]string{
-		EXIT: "exit is a shell builtin\n",
-		ECHO: "echo is a shell builtin\n",
-		TYPE: "type is a shell builtin\n",
+	TypeMap = map[string]empty{
+		EXIT: {},
+		ECHO: {},
+		TYPE: {},
+		PWD:  {},
 	}
 )
 

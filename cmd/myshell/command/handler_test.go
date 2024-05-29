@@ -50,7 +50,7 @@ func TestHandler(t *testing.T) {
 			args:    []string{},
 			expectedOutput: func() string {
 				cwd, _ := os.Getwd()
-				return cwd
+				return cwd + "\n"
 			}(),
 		},
 	}

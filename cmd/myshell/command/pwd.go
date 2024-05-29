@@ -1,7 +1,15 @@
 package command
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func Pwd() (string, error) {
-	return os.Getwd()
+	res, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%s\n", res), nil
 }
