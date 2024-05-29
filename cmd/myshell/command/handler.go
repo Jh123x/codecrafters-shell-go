@@ -10,6 +10,8 @@ func HandleCommand(command string, args []string) (string, error) {
 		return Exit(args)
 	case consts.TYPE:
 		return Type(args)
+	case consts.PWD:
+		return Pwd()
 	default:
 		return DefaultCommand(command, args)
 	}

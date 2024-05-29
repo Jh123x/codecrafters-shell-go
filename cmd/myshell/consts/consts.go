@@ -7,6 +7,7 @@ const (
 	EXIT = "exit"
 	ECHO = "echo"
 	TYPE = "type"
+	PWD  = "pwd"
 
 	// Environment variables
 	ENV_PATH = "PATH"

@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
@@ -43,6 +44,14 @@ func TestHandler(t *testing.T) {
 			args:           []string{},
 			expectedOutput: "",
 			expectedErr:    consts.ErrTypeUsage,
+		},
+		"pwd": {
+			command: consts.PWD,
+			args:    []string{},
+			expectedOutput: func() string {
+				cwd, _ := os.Getwd()
+				return cwd
+			}(),
 		},
 	}
 
