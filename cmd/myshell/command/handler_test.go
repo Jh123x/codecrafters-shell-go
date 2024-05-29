@@ -10,6 +10,8 @@ import (
 )
 
 func TestHandler(t *testing.T) {
+	cwd, _ := os.Getwd()
+
 	tests := map[string]struct {
 		command string
 		args    []string
@@ -46,12 +48,13 @@ func TestHandler(t *testing.T) {
 			expectedErr:    consts.ErrTypeUsage,
 		},
 		"pwd": {
-			command: consts.PWD,
-			args:    []string{},
-			expectedOutput: func() string {
-				cwd, _ := os.Getwd()
-				return cwd + "\n"
-			}(),
+			command:        consts.PWD,
+			args:           []string{},
+			expectedOutput: cwd + "\n",
+		},
+		"cd": {
+			command: consts.CD,
+			args:    []string{"."},
 		},
 	}
 

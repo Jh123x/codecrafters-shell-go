@@ -12,6 +12,8 @@ func HandleCommand(command string, args []string) (string, error) {
 		return Type(args)
 	case consts.PWD:
 		return Pwd()
+	case consts.CD:
+		return ChangeDir(args)
 	default:
 		return DefaultCommand(command, args)
 	}

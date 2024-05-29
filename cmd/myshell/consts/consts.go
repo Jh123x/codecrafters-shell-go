@@ -8,6 +8,7 @@ const (
 	ECHO = "echo"
 	TYPE = "type"
 	PWD  = "pwd"
+	CD   = "cd"
 
 	// Environment variables
 	ENV_PATH = "PATH"
@@ -21,12 +22,15 @@ var (
 		ECHO: {},
 		TYPE: {},
 		PWD:  {},
+		CD:   {},
 	}
 )
 
 var (
 	ErrEXIT          = errors.New("exit")
-	ErrTypeUsage     = errors.New("usage: type <command>")
 	ErrEnvPathNotSet = errors.New("environment variable PATH not set")
 	ErrFileNotFound  = errors.New("file not found")
+
+	ErrTypeUsage  = errors.New("usage: type <command>")
+	ErrChdirUsage = errors.New("usage: cd <directory>")
 )
