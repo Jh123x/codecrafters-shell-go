@@ -13,10 +13,16 @@ func GetFilePath(filename string) (string, error) {
 	if path.IsAbs(filename) {
 		return filename, nil
 	}
+
 	return ParseRelativePath(filename)
 }
 
 func ParseRelativePath(filename string) (string, error) {
+	// Check if the file is in the current directory
+	if _, err := os.Stat(filename); err == nil {
+		return filename, nil
+	}
+
 	envPaths := os.Getenv(consts.ENV_PATH)
 	if len(envPaths) == 0 {
 		return "", consts.ErrEnvPathNotSet
@@ -30,11 +36,13 @@ func ParseRelativePath(filename string) (string, error) {
 
 		return filePath, nil
 	}
+
 	return "", consts.ErrFileNotFound
 }
 
 func RunFile(absFilePath string, args []string) (string, error) {
 	cmd := exec.Command(absFilePath, args...)
+
 	stdout, err := cmd.Output()
 	if err != nil {
 		return "", err
