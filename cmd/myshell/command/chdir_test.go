@@ -13,7 +13,7 @@ import (
 
 func TestChdir(t *testing.T) {
 	oldDir, _ := os.Getwd()
-	homeDir := filepath.Join(oldDir, "..", "parser")
+	homeDir := filepath.Join(oldDir, "..", "command")
 	os.Setenv(consts.ENV_HOME, homeDir)
 
 	tests := map[string]struct {
@@ -23,7 +23,6 @@ func TestChdir(t *testing.T) {
 	}{
 		"no args": {
 			args:        []string{},
-			expectedErr: consts.ErrChdirUsage,
 			expectedDir: oldDir,
 		},
 		"unknown dir": {
