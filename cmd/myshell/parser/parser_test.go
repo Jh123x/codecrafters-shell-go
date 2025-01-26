@@ -71,6 +71,14 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       `"bar"  "shell's"  "foo"`,
 			expectedArgs: []string{"bar", "shell's", "foo"},
 		},
+		"escape string": {
+			argStr:       `"test\""`,
+			expectedArgs: []string{"test\""},
+		},
+		"escape multiple things": {
+			argStr:       `"test\'" 'test\\'`,
+			expectedArgs: []string{"test'", "test\\"},
+		},
 	}
 
 	for name, tc := range tests {

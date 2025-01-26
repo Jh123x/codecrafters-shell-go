@@ -36,14 +36,27 @@ func parseArguments(argument string) []string {
 	currArg := strings.Builder{}
 	argStr := make([]string, 0)
 	currQuote := byte(0)
+	isEscape := false
 	for i := 0; i < len(argument); i++ {
 		currentByte := argument[i]
+
+		if isEscape && currQuote != byte(0) {
+			isEscape = false
+			currArg.WriteByte(currentByte)
+			continue
+		}
+
 		if currentByte == ' ' && currQuote == 0 {
 			if currArg.Len() > 0 {
 				argStr = append(argStr, currArg.String())
 				currArg.Reset()
 			}
 
+			continue
+		}
+
+		if currentByte == '\\' {
+			isEscape = true
 			continue
 		}
 
