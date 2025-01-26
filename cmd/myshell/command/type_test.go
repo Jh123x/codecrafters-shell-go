@@ -27,7 +27,7 @@ func TestType(t *testing.T) {
 		"unknown command": {
 			args:           []string{"unknown"},
 			expectedOutput: "",
-			expectedErr:    errors.New("unknown not found"),
+			expectedErr:    errors.New("unknown: not found"),
 		},
 	}
 

@@ -23,8 +23,7 @@ func TestChdir(t *testing.T) {
 	}{
 		"no args": {
 			args:        []string{},
-			expectedErr: consts.ErrChdirUsage,
-			expectedDir: oldDir,
+			expectedDir: homeDir,
 		},
 		"unknown dir": {
 			args:        []string{"/unknown"},
