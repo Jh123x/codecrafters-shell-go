@@ -76,8 +76,8 @@ func Test_parseArguments(t *testing.T) {
 			expectedArgs: []string{"test\""},
 		},
 		"escape multiple things": {
-			argStr:       `"test\'" 'test\\'`,
-			expectedArgs: []string{"test'", "test\\"},
+			argStr:       `"test\'" 'test\\' \\\\`,
+			expectedArgs: []string{"test'", "test\\", "\\\\"},
 		},
 	}
 
