@@ -71,27 +71,16 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       `"bar"  "shell's"  "foo"`,
 			expectedArgs: []string{"bar", "shell's", "foo"},
 		},
-		"escape string": {
-			argStr:       `"test\""`,
-			expectedArgs: []string{"test\""},
-		},
-		"escape multiple things": {
-			argStr:       `"test\'" 'test\\' \\\\`,
-			expectedArgs: []string{"test'", "test\\", "\\\\"},
-		},
-		"sample escape string": {
-			argStr: `"/tmp/file\\name" "/tmp/file\ name" `,
+		"sample 2": {
+			argStr: `"before\   after"`,
 			expectedArgs: []string{
-				"/tmp/file\\name",
-				"/tmp/file name",
+				"before\\   after",
 			},
 		},
-		"complex string": {
-			argStr: `"/tmp/qux/f\n17" "/tmp/qux/f\53" "/tmp/qux/f'\'19"`,
+		"sample 3": {
+			argStr: `world\ \ \ \ \ \ script`,
 			expectedArgs: []string{
-				"/tmp/qux/fn17",
-				"/tmp/qux/f53",
-				"/tmp/qux/f''19",
+				"world      script",
 			},
 		},
 	}

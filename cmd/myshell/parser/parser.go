@@ -39,8 +39,7 @@ func parseArguments(argument string) []string {
 	isEscape := false
 	for i := 0; i < len(argument); i++ {
 		currentByte := argument[i]
-
-		if isEscape {
+		if isEscape && currQuote == byte(0) {
 			isEscape = false
 			currArg.WriteByte(currentByte)
 			continue
@@ -55,7 +54,7 @@ func parseArguments(argument string) []string {
 			continue
 		}
 
-		if currentByte == '\\' {
+		if currentByte == '\\' && currQuote == byte(0) {
 			isEscape = true
 			continue
 		}
