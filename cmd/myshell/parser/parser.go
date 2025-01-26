@@ -39,8 +39,11 @@ func parseArguments(argument string) []string {
 	for i := 0; i < len(argument); i++ {
 		currentByte := argument[i]
 		if currentByte == ' ' && currQuote == 0 {
-			argStr = append(argStr, currArg.String())
-			currArg.Reset()
+			if currArg.Len() > 0 {
+				argStr = append(argStr, currArg.String())
+				currArg.Reset()
+			}
+
 			continue
 		}
 

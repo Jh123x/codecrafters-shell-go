@@ -47,6 +47,10 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       "this_is_one_arg",
 			expectedArgs: []string{"this_is_one_arg"},
 		},
+		"extra spaces": {
+			argStr:       "test      test2",
+			expectedArgs: []string{"test", "test2"},
+		},
 		"no single quotes": {
 			argStr:       "test test",
 			expectedArgs: []string{"test", "test"},
