@@ -33,3 +33,33 @@ func TestParseFromReader(t *testing.T) {
 		})
 	}
 }
+
+func Test_parseArguments(t *testing.T) {
+	tests := map[string]struct {
+		argStr       string
+		expectedArgs []string
+	}{
+		"no args": {
+			argStr:       "",
+			expectedArgs: []string{},
+		},
+		"single arg": {
+			argStr:       "this_is_one_arg",
+			expectedArgs: []string{"this_is_one_arg"},
+		},
+		"no single quotes": {
+			argStr:       "test test",
+			expectedArgs: []string{"test", "test"},
+		},
+		"single quotes": {
+			argStr:       "test 'test test'",
+			expectedArgs: []string{"test", "test test"},
+		},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			assert.Equal(t, tc.expectedArgs, parseArguments(tc.argStr))
+		})
+	}
+}
