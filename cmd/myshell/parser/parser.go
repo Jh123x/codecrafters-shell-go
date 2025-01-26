@@ -42,9 +42,6 @@ func parseArguments(argument string) []string {
 
 		if isEscape {
 			isEscape = false
-			if currentByte == 'n' {
-				currentByte = '\n'
-			}
 			currArg.WriteByte(currentByte)
 			continue
 		}

@@ -89,7 +89,7 @@ func Test_parseArguments(t *testing.T) {
 		"complex string": {
 			argStr: `"/tmp/qux/f\n17" "/tmp/qux/f\53" "/tmp/qux/f'\'19"`,
 			expectedArgs: []string{
-				"/tmp/qux/f\n17",
+				"/tmp/qux/fn17",
 				"/tmp/qux/f53",
 				"/tmp/qux/f''19",
 			},
