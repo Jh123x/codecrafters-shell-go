@@ -52,7 +52,7 @@ func parseArguments(argument string) []string {
 			continue
 		}
 
-		if currentByte == '\'' || currentByte == '"' {
+		if currQuote == byte(0) && currentByte == '\'' || currentByte == '"' {
 			currQuote = currentByte
 			continue
 		}
