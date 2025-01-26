@@ -63,6 +63,10 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       "test 'test test'",
 			expectedArgs: []string{"test", "test test"},
 		},
+		"double quotes": {
+			argStr:       `test "test2""test3"`,
+			expectedArgs: []string{"test", "test2test3"},
+		},
 	}
 
 	for name, tc := range tests {
