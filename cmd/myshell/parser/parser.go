@@ -2,7 +2,6 @@ package parser
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"strings"
 )
@@ -18,12 +17,10 @@ func ParseFromReader(reader io.Reader) (string, []string, error) {
 }
 
 func parseCommand(command string) (string, []string) {
-	fmt.Println(command)
 	split_args := strings.SplitN(
 		strings.Trim(command, "\n"),
 		" ", 2,
 	)
-	fmt.Println(split_args)
 
 	switch len(split_args) {
 	case 0:
@@ -41,7 +38,6 @@ func parseArguments(argument string) []string {
 	currQuote := byte(0)
 	for i := 0; i < len(argument); i++ {
 		currentByte := argument[i]
-		fmt.Println(currentByte)
 		if currentByte == ' ' && currQuote == 0 {
 			argStr = append(argStr, currArg.String())
 			currArg.Reset()
@@ -55,7 +51,7 @@ func parseArguments(argument string) []string {
 			continue
 		}
 
-		if currentByte == "'"[0] {
+		if currentByte == '\'' {
 			currQuote = currentByte
 			continue
 		}
@@ -67,6 +63,5 @@ func parseArguments(argument string) []string {
 		argStr = append(argStr, currArg.String())
 	}
 
-	fmt.Println(argStr)
 	return argStr
 }
