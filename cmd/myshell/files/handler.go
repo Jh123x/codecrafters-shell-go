@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
@@ -41,7 +42,9 @@ func ParseRelativePath(filename string) (string, error) {
 }
 
 func RunFile(absFilePath string, args []string) (string, error) {
+	absFilePath = filepath.Clean(absFilePath)
 	cmd := exec.Command(absFilePath, args...)
+	cmd.Args[0] = filepath.Base(absFilePath)
 
 	stdout, err := cmd.Output()
 	if err != nil {
