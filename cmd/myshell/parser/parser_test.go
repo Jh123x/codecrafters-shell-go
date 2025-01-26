@@ -51,6 +51,10 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       "test      test2",
 			expectedArgs: []string{"test", "test2"},
 		},
+		"test special quotes case": {
+			argStr:       "'test     example' 'hello''world'",
+			expectedArgs: []string{"test     example", "helloworld"},
+		},
 		"no single quotes": {
 			argStr:       "test test",
 			expectedArgs: []string{"test", "test"},
