@@ -18,7 +18,7 @@ func ParseFromReader(reader io.Reader) (string, []string, error) {
 
 func parseCommand(command string) (string, []string) {
 	split_args := strings.SplitN(
-		strings.Trim(command, "\n"),
+		strings.TrimRight(command, "\n"),
 		" ", 2,
 	)
 
@@ -42,6 +42,9 @@ func parseArguments(argument string) []string {
 
 		if isEscape {
 			isEscape = false
+			if currentByte == 'n' {
+				currentByte = '\n'
+			}
 			currArg.WriteByte(currentByte)
 			continue
 		}

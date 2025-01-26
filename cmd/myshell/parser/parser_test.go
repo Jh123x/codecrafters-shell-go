@@ -79,6 +79,21 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       `"test\'" 'test\\' \\\\`,
 			expectedArgs: []string{"test'", "test\\", "\\\\"},
 		},
+		"sample escape string": {
+			argStr: `"/tmp/file\\name" "/tmp/file\ name" `,
+			expectedArgs: []string{
+				"/tmp/file\\name",
+				"/tmp/file name",
+			},
+		},
+		"complex string": {
+			argStr: `"/tmp/qux/f\n17" "/tmp/qux/f\53" "/tmp/qux/f'\'19"`,
+			expectedArgs: []string{
+				"/tmp/qux/f\n17",
+				"/tmp/qux/f53",
+				"/tmp/qux/f''19",
+			},
+		},
 	}
 
 	for name, tc := range tests {
