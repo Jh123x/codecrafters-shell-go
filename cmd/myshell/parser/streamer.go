@@ -30,7 +30,6 @@ func (s *Streamer) GetNextCommand() (string, error) {
 
 		switch currByte := byteReader[0]; currByte {
 		case 13: // Newline
-			fmt.Print("\r\n")
 			cmd := string(buffer)
 			return cmd, nil
 		case 0x7f: // Delete
