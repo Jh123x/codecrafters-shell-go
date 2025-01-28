@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	IncompleteQuote = errors.New("missing closing quote")
+	ErrIncompleteQuote = errors.New("missing closing quote")
 )
 
 func parseQuote(arguments string, startIdx int) (string, int, error) {
@@ -35,7 +35,7 @@ func parseSingleQuote(arguments string, startIdx int) (string, int, error) {
 		startIdx += 1
 	}
 
-	return "", -1, IncompleteQuote
+	return "", -1, ErrIncompleteQuote
 }
 
 func parseDoubleQuote(arguments string, startIdx int) (string, int, error) {
@@ -51,5 +51,5 @@ func parseDoubleQuote(arguments string, startIdx int) (string, int, error) {
 		startIdx += 1
 	}
 
-	return "", -1, IncompleteQuote
+	return "", -1, ErrIncompleteQuote
 }
