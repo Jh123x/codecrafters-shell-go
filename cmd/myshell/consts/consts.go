@@ -35,8 +35,11 @@ var (
 	ErrTypeUsage  = errors.New("usage: type <command>")
 	ErrChdirUsage = errors.New("usage: cd <directory>")
 
+	ErrEmptyCommand        = errors.New("command cannot be empty")
 	ErrIncompleteQuote     = errors.New("missing closing quote")
 	ErrUnexpectedEndOfLine = errors.New("unexpected end of line")
 	ErrInvalidCommandStart = errors.New("invalid command start")
-	ErrInvalidLinkType     = errors.New("invalid link type")
+	ErrUnsupportedLinkType = errors.New("this link type is not supported yet")
+	ErrNilLink             = errors.New("link cannot be nil")
+	ErrUnexpectedLinkValue = errors.New("unexpected link error")
 )

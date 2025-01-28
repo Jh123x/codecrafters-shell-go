@@ -83,7 +83,7 @@ func parseLink(linkType string, tokens []string) (*Link, error) {
 	case ";":
 		return &Link{Type: LinkTypeNone, LinkedCommand: nextCmd}, nil
 	default:
-		return nil, consts.ErrInvalidLinkType
+		return nil, consts.ErrUnsupportedLinkType
 	}
 }
 
