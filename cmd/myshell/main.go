@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/command"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
@@ -44,13 +43,9 @@ func main() { // switch stdin into 'raw' mode
 			break
 		}
 
-		fmt.Print(output)
+		fmt.Printf("%s\r", output)
 		if err != nil {
-			errMsg := err.Error()
-			if !strings.HasSuffix(errMsg, "\n") {
-				errMsg += "\n"
-			}
-			fmt.Print(errMsg)
+			fmt.Printf("%s\n", err.Error())
 			continue
 		}
 	}
