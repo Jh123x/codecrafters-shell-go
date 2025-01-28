@@ -1,16 +1,27 @@
 package command
 
 import (
+	"errors"
+
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
 )
 
-func HandleCommand(command *parser.Command) (res string, err error) {
+func HandleCommand(command *parser.Command) (string, error) {
 	if command == nil {
 		return "", consts.ErrEmptyCommand
 	}
 
 	stdout, err := handleCommand(command)
+	if len(stdout) > 0 {
+		stdout = utils.FixStrPrinting(stdout)
+	}
+
+	if err != nil && err != consts.ErrEXIT {
+		err = errors.New(utils.FixStrPrinting(err.Error()))
+	}
+
 	if command.Link != nil {
 		return handleLink(command.Link, stdout, err)
 	}
