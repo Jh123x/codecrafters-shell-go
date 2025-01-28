@@ -29,6 +29,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 	cmd := link.Args
 	switch link.Type {
 	case parser.LinkTypeStdout:
+		fmt.Println("type stdout write file")
 		if err := WriteToFile(cmd[0], stdout); err != nil {
 			fmt.Println("error while writing stdout to file", err)
 			return "", err
@@ -40,6 +41,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		return "", stderr
 
 	case parser.LinkTypeStderr:
+		fmt.Println("type stderr write file")
 		errTxt := ""
 		if stderr != nil {
 			fmt.Println("stderr is empty in stderr redirection flow")
@@ -53,6 +55,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 
 		return stdout, nil
 	case parser.LinkTypeAppendStdout:
+		fmt.Println("type stdout append file")
 		if err := AppendToFile(cmd[0], stdout); err != nil {
 			fmt.Println("error while appending to file", err)
 			return "", err
@@ -63,6 +66,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		}
 		return "", stderr
 	case parser.LinkTypeAppendStderr:
+		fmt.Println("type stderr append file")
 		errTxt := ""
 		if stderr != nil {
 			fmt.Println("stderr is empty in stderr redirection append flow")
