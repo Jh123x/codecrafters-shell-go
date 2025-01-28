@@ -37,11 +37,12 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		return "", stderr
 
 	case parser.LinkTypeStderr:
-		if stderr == nil {
-			return stdout, nil
+		errTxt := ""
+		if stderr != nil {
+			errTxt = stderr.Error()
 		}
 
-		if err := WriteToFile(cmd[0], stderr.Error()); err != nil {
+		if err := WriteToFile(cmd[0], errTxt); err != nil {
 			return "", err
 		}
 
