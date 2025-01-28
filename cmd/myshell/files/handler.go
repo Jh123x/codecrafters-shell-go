@@ -80,5 +80,5 @@ func parseErrStr(errorVal string) error {
 		return nil
 	}
 
-	return errors.New(strings.Trim(errorVal, " \r\n") + "\r\n")
+	return errors.New(strings.Trim(errorVal, " \r\n"))
 }

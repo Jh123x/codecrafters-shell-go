@@ -14,9 +14,10 @@ import (
 func main() { // switch stdin into 'raw' mode
 	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		return
 	}
+
 	defer func() {
 		if err := term.Restore(int(os.Stdin.Fd()), oldState); err != nil {
 			fmt.Println(err)
@@ -25,7 +26,7 @@ func main() { // switch stdin into 'raw' mode
 
 	streamer := parser.NewStreamer(os.Stdin)
 	for {
-		fmt.Print("$ ")
+		fmt.Print("\r$ ")
 		cmdStr, err := streamer.GetNextCommand()
 		if err != nil {
 			fmt.Println("Error reading command")
@@ -50,7 +51,7 @@ func main() { // switch stdin into 'raw' mode
 
 		if err != nil {
 			if errMsg := err.Error(); len(errMsg) > 0 {
-				fmt.Print(errMsg, strings.Repeat("\b", len(errMsg)))
+				fmt.Print(errMsg, "\r\n", strings.Repeat("\b", len(errMsg)))
 			}
 		}
 	}
