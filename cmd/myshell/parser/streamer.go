@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/autocomplete"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
@@ -19,6 +20,8 @@ func NewStreamer(reader io.Reader) *Streamer {
 func (s *Streamer) GetNextCommand() (string, error) {
 	buffer := make([]byte, 0, 100)
 	byteReader := make([]byte, 1)
+	isTab := false
+	currSuggestions := ([]string)(nil)
 
 	for {
 		if _, err := s.reader.Read(byteReader); err != nil {
@@ -41,16 +44,33 @@ func (s *Streamer) GetNextCommand() (string, error) {
 		case 0x9:
 			// Autocomplete logic
 			currStr := string(buffer)
-			closestEstimate, err := autocomplete.GetClosestCommand(currStr)
+			closestEstimates, err := autocomplete.GetClosestCommands(currStr)
 			if err != nil {
+				fmt.Println("Error in command hit")
 				return "", err
 			}
 
-			if len(closestEstimate) < len(currStr) {
-				fmt.Printf("\a") // Ring bell
-				break
+			if isTab {
+				buffer = []byte(autocomplete.GetCommonPrefix(currSuggestions))
+				fmt.Printf("\r\n%s\r\n$ %s", strings.Join(currSuggestions, " "), string(buffer))
+				isTab = false
+				continue
 			}
 
+			switch len(closestEstimates) {
+			case 0:
+				fmt.Printf("\a")
+				continue
+			case 1:
+				break
+			default:
+				isTab = true
+				currSuggestions = closestEstimates
+				fmt.Printf("\a")
+				continue
+			}
+
+			closestEstimate := closestEstimates[0]
 			remainingEst := closestEstimate[len(buffer):] + " "
 			buffer = append(buffer, []byte(remainingEst)...)
 			fmt.Printf("%s", remainingEst)
