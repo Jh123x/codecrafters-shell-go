@@ -50,6 +50,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		return stdout, nil
 	case parser.LinkTypeAppendStdout:
 		if err := AppendToFile(cmd[0], stdout); err != nil {
+			fmt.Println("error while appending to file", err)
 			return "", err
 		}
 		if stderr == nil {
@@ -63,6 +64,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		}
 
 		if err := AppendToFile(cmd[0], errTxt); err != nil {
+			fmt.Println("error while appending to file", err)
 			return "", err
 		}
 
