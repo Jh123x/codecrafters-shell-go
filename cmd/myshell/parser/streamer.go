@@ -19,6 +19,7 @@ func NewStreamer(reader io.Reader) *Streamer {
 func (s *Streamer) GetNextCommand() (string, error) {
 	buffer := make([]byte, 0, 100)
 	byteReader := make([]byte, 1)
+
 	for {
 		if _, err := s.reader.Read(byteReader); err != nil {
 			return "", err
@@ -29,12 +30,12 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			fmt.Print("\r\n")
 			cmd := string(buffer)
 			return cmd, nil
-		case 8: // Delete
+		case 0x7f: // Delete
 			if len(buffer) == 0 {
 				break
 			}
-
 			buffer = buffer[:len(buffer)-1]
+			fmt.Printf("\b \b")
 		case 0x03: // Ctrl + C
 			return consts.EXIT, nil
 		case 0x9:
