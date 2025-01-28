@@ -10,14 +10,7 @@ func WriteToFile(filePath, contents string) error {
 }
 
 func AppendToFile(filePath, contents string) error {
-	if _, err := os.Stat(filePath); err != nil {
-		if os.IsNotExist(err) {
-			return WriteToFile(filePath, contents)
-		}
-		return err
-	}
-
-	fd, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
+	fd, err := os.OpenFile(filePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
