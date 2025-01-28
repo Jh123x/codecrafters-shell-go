@@ -72,12 +72,6 @@ func Test_parseArguments(t *testing.T) {
 			argStr:       `"bar"  "shell's"  "foo"`,
 			expectedArgs: []string{"bar", "shell's", "foo"},
 		},
-		"sample 2": {
-			argStr: `"before\   after"`,
-			expectedArgs: []string{
-				"before\\   after",
-			},
-		},
 		"sample 3": {
 			argStr: `world\ \ \ \ \ \ script`,
 			expectedArgs: []string{
@@ -94,6 +88,14 @@ func Test_parseArguments(t *testing.T) {
 			argStr: "'example\\\"testhello\\\"shell'",
 			expectedArgs: []string{
 				"example\\\"testhello\\\"shell",
+			},
+		},
+		"quote test": {
+			argStr: "\"/tmp/baz/'f 81'\" \"/tmp/baz/'f  \\58'\" \"/tmp/baz/'f \\83\\'\"",
+			expectedArgs: []string{
+				`/tmp/baz/'f 81'`,
+				`/tmp/baz/'f  \58'`,
+				`/tmp/baz/'f \83\'`,
 			},
 		},
 	}
