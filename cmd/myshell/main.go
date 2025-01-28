@@ -44,11 +44,11 @@ func main() { // switch stdin into 'raw' mode
 		}
 
 		if len(output) > 0 {
-			fmt.Printf("%s\r", output)
+			fmt.Printf("\r%s", output)
 		}
 
 		if err != nil {
-			fmt.Printf("%s\n", err.Error())
+			fmt.Printf("\r%s", err.Error())
 			continue
 		}
 	}
