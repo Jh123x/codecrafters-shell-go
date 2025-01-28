@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"io"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 )
 
 func ParseFromReader(reader io.Reader) (*Command, error) {
@@ -17,20 +19,72 @@ func ParseFromReader(reader io.Reader) (*Command, error) {
 
 func parseCommands(command string) (*Command, error) {
 	args, err := parseArguments(command)
-	cmdBuilder := &Command{}
-	for _, arg := range args {
-		if cmdBuilder.Command == "" {
-			cmdBuilder.Command = arg
-			continue
-		}
-
-		switch arg {
-		default:
-			cmdBuilder.Args = append(cmdBuilder.Args, arg)
-		}
+	if err != nil {
+		return nil, err
 	}
 
-	return cmdBuilder, err
+	return parseCommand(args)
+}
+
+func parseCommand(tokens []string) (*Command, error) {
+	if len(tokens) == 0 {
+		return nil, nil
+	}
+
+	var (
+		currIdx int = 0
+		cmd     *Command
+	)
+
+	for currIdx < len(tokens) {
+		switch curr := tokens[currIdx]; curr {
+		case ">", ">>", "<<", "2>", "1>":
+			if cmd == nil {
+				return nil, consts.ErrInvalidCommandStart
+			}
+
+			link, err := parseLink(curr, tokens[currIdx+1:])
+			if err != nil {
+				return nil, err
+			}
+
+			cmd.Link = link
+		default:
+			if cmd == nil {
+				cmd = &Command{}
+			}
+
+			if cmd.Command == "" {
+				cmd.Command = curr
+				break
+			}
+
+			cmd.Args = append(cmd.Args, curr)
+		}
+		currIdx += 1
+	}
+
+	return cmd, nil
+}
+
+func parseLink(linkType string, tokens []string) (*Link, error) {
+	nextCmd, err := parseCommand(tokens)
+	if err != nil {
+		return nil, err
+	}
+
+	switch linkType {
+	case ">", "1>":
+		return &Link{Type: LinkTypeStdout, LinkedCommand: nextCmd}, nil
+	case "2>":
+		return &Link{Type: LinkTypeStderr, LinkedCommand: nextCmd}, nil
+	case "|":
+		return &Link{Type: LinkTypePipe, LinkedCommand: nextCmd}, nil
+	case ";":
+		return &Link{Type: LinkTypeNone, LinkedCommand: nextCmd}, nil
+	default:
+		return nil, consts.ErrInvalidLinkType
+	}
 }
 
 func parseArguments(argument string) ([]string, error) {

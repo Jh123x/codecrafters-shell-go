@@ -7,6 +7,10 @@ const (
 	LinkTypeStderr
 	LinkTypeAppendStdout
 	LinkTypeAppendStderr
+
+	// Others
+	LinkTypePipe
+	LinkTypeNone
 )
 
 type Link struct {
@@ -17,7 +21,7 @@ type Link struct {
 type Command struct {
 	Command string
 	Args    []string
-	Next    *Link
+	Link    *Link
 }
 
 func NewCommand(
@@ -27,8 +31,6 @@ func NewCommand(
 	return &Command{
 		Command: command,
 		Args:    args,
-		Next:    nil,
+		Link:    nil,
 	}
 }
-
-func (c *Command) Link(link *Link) { c.Next = link }

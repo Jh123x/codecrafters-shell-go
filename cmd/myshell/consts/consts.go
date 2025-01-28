@@ -34,4 +34,9 @@ var (
 
 	ErrTypeUsage  = errors.New("usage: type <command>")
 	ErrChdirUsage = errors.New("usage: cd <directory>")
+
+	ErrIncompleteQuote     = errors.New("missing closing quote")
+	ErrUnexpectedEndOfLine = errors.New("unexpected end of line")
+	ErrInvalidCommandStart = errors.New("invalid command start")
+	ErrInvalidLinkType     = errors.New("invalid link type")
 )

@@ -1,13 +1,9 @@
 package parser
 
 import (
-	"errors"
 	"strings"
-)
 
-var (
-	ErrIncompleteQuote     = errors.New("missing closing quote")
-	ErrUnexpectedEndOfLine = errors.New("unexpected end of line")
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 )
 
 func parseQuote(arguments string, startIdx int) (string, int, error) {
@@ -36,7 +32,7 @@ func parseSingleQuote(arguments string, startIdx int) (string, int, error) {
 		startIdx += 1
 	}
 
-	return "", -1, ErrIncompleteQuote
+	return "", -1, consts.ErrIncompleteQuote
 }
 
 func parseDoubleQuote(arguments string, startIdx int) (string, int, error) {
@@ -59,12 +55,12 @@ func parseDoubleQuote(arguments string, startIdx int) (string, int, error) {
 		startIdx += 1
 	}
 
-	return "", -1, ErrIncompleteQuote
+	return "", -1, consts.ErrIncompleteQuote
 }
 
 func parseEscape(arguments string, startIdx int) (string, int, error) {
 	if startIdx >= len(arguments) {
-		return "", -1, ErrUnexpectedEndOfLine
+		return "", -1, consts.ErrUnexpectedEndOfLine
 	}
 
 	switch currByte := arguments[startIdx]; currByte {
