@@ -12,11 +12,10 @@ func ParseFromReader(reader io.Reader) (string, []string, error) {
 		return "", nil, scanner.Err()
 	}
 
-	cmd, args := parseCommand(scanner.Text())
-	return cmd, args, nil
+	return parseCommand(scanner.Text())
 }
 
-func parseCommand(command string) (string, []string) {
+func parseCommand(command string) (string, []string, error) {
 	split_args := strings.SplitN(
 		strings.TrimRight(command, "\n"),
 		" ", 2,
@@ -24,57 +23,56 @@ func parseCommand(command string) (string, []string) {
 
 	switch len(split_args) {
 	case 0:
-		return "", nil
+		return "", nil, nil
 	case 1:
-		return split_args[0], nil
+		return split_args[0], nil, nil
 	default:
-		return split_args[0], parseArguments(split_args[1])
+		args, err := parseArguments(split_args[1])
+		return split_args[0], args, err
 	}
 }
 
-func parseArguments(argument string) []string {
+func parseArguments(argument string) ([]string, error) {
 	currArg := strings.Builder{}
 	argStr := make([]string, 0)
-	currQuote := byte(0)
+	currIdx := 0
 	isEscape := false
-	for i := 0; i < len(argument); i++ {
-		currentByte := argument[i]
-		if isEscape && currQuote == byte(0) {
+	for currIdx < len(argument) {
+		if isEscape {
 			isEscape = false
-			currArg.WriteByte(currentByte)
+			currArg.WriteByte(argument[currIdx])
+			currIdx += 1
 			continue
 		}
 
-		if currentByte == ' ' && currQuote == 0 {
-			if currArg.Len() > 0 {
-				argStr = append(argStr, currArg.String())
-				currArg.Reset()
+		switch currentByte := argument[currIdx]; currentByte {
+		case ' ':
+			if currArg.Len() == 0 {
+				break
 			}
 
-			continue
-		}
+			argStr = append(argStr, currArg.String())
+			currArg.Reset()
+		case '\'', '"':
+			arg, nextIdx, err := parseQuote(argument, currIdx)
+			if err != nil {
+				return nil, err
+			}
 
-		if currentByte == '\\' && currQuote == byte(0) {
+			currArg.WriteString(arg)
+			currIdx = nextIdx
+			continue
+		case '\\':
 			isEscape = true
-			continue
+		default:
+			currArg.WriteByte(currentByte)
 		}
-
-		if currentByte == currQuote {
-			currQuote = 0
-			continue
-		}
-
-		if currQuote == byte(0) && currentByte == '\'' || currentByte == '"' {
-			currQuote = currentByte
-			continue
-		}
-
-		currArg.WriteByte(currentByte)
+		currIdx += 1
 	}
 
 	if currArg.Len() > 0 {
 		argStr = append(argStr, currArg.String())
 	}
 
-	return argStr
+	return argStr, nil
 }

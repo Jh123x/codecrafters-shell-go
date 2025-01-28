@@ -38,6 +38,7 @@ func Test_parseArguments(t *testing.T) {
 	tests := map[string]struct {
 		argStr       string
 		expectedArgs []string
+		expectedErr  error
 	}{
 		"no args": {
 			argStr:       "",
@@ -83,11 +84,25 @@ func Test_parseArguments(t *testing.T) {
 				"world      script",
 			},
 		},
+		"single quotes eg": {
+			argStr: `'shell\\\nscript'`,
+			expectedArgs: []string{
+				"shell\\\\\\nscript",
+			},
+		},
+		"single quotes eg2": {
+			argStr: "'example\\\"testhello\\\"shell'",
+			expectedArgs: []string{
+				"example\\\"testhello\\\"shell",
+			},
+		},
 	}
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			assert.Equal(t, tc.expectedArgs, parseArguments(tc.argStr))
+			args, err := parseArguments(tc.argStr)
+			assert.Equal(t, tc.expectedArgs, args)
+			assert.Equal(t, tc.expectedErr, err)
 		})
 	}
 }
