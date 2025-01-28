@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
@@ -17,7 +18,7 @@ func HandleCommand(command *parser.Command) (res string, err error) {
 		return handleLink(command.Link, stdout, err)
 	}
 
-	return stdout, err
+	return strings.ReplaceAll(stdout, "\n", "\r\n"), err
 }
 
 func handleLink(link *parser.Link, stdout string, stderr error) (string, error) {
