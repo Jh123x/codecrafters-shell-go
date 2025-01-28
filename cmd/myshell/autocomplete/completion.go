@@ -55,18 +55,19 @@ func getKeys(v map[string]struct{}) []string {
 func GetCommonPrefix(commands []string) string {
 	currPrefix := commands[0]
 	for _, cmd := range commands[1:] {
-		if strings.HasPrefix(cmd, currPrefix) {
+		sharedChars := getSharedChars(currPrefix, cmd)
+		currPrefix = currPrefix[:sharedChars]
+	}
+	return currPrefix
+}
+
+func getSharedChars(s1, s2 string) int {
+	minLen := min(len(s1), len(s2))
+	for idx := 0; idx < minLen; idx++ {
+		if s1[idx] == s2[idx] {
 			continue
 		}
-
-		sharedChars := 0
-		for _, letter := range cmd {
-			if byte(letter) != currPrefix[sharedChars] {
-				break
-			}
-			sharedChars += 1
-		}
-		currPrefix = currPrefix[:sharedChars+1]
+		return idx
 	}
-	return ""
+	return minLen
 }
