@@ -23,14 +23,14 @@ func TestWriteToFil(t *testing.T) {
 			setUp: func(t *testing.T) {
 				path := filepath.Join(tmpDir, "exists.txt")
 				fmt.Println(path)
-				assert.Nil(t, os.WriteFile(path, []byte("some other data"), 0644))
+				assert.Nil(t, os.WriteFile(path, []byte("some other create data"), 0644))
 			},
 			filePath: filepath.Join(tmpDir, "exists.txt"),
-			contents: "some content",
+			contents: "some create content",
 		},
 		"file which does not exists": {
 			filePath: filepath.Join(tmpDir, "other.txt"),
-			contents: "some content",
+			contents: "some create not exists content",
 		},
 	}
 
@@ -57,19 +57,23 @@ func TestAppendToFile(t *testing.T) {
 		setUp    func(*testing.T)
 		filePath string
 		contents string
+
+		expectedContents string
 	}{
 		"file which exists": {
 			setUp: func(t *testing.T) {
 				path := filepath.Join(tmpDir, "exists.txt")
 				fmt.Println(path)
-				assert.Nil(t, os.WriteFile(path, []byte("some other data\n"), 0644))
+				assert.Nil(t, os.WriteFile(path, []byte("some other append data\n"), 0644))
 			},
-			filePath: filepath.Join(tmpDir, "exists.txt"),
-			contents: "some other data\nsome content",
+			filePath:         filepath.Join(tmpDir, "exists.txt"),
+			contents:         "some append content",
+			expectedContents: "some other append data\nsome append content",
 		},
 		"file which does not exists": {
-			filePath: filepath.Join(tmpDir, "other.txt"),
-			contents: "some content",
+			filePath:         filepath.Join(tmpDir, "other.txt"),
+			contents:         "some append content",
+			expectedContents: "some append content",
 		},
 	}
 
@@ -82,7 +86,7 @@ func TestAppendToFile(t *testing.T) {
 			assert.Nil(t, AppendToFile(tc.filePath, tc.contents))
 			res, err := os.ReadFile(tc.filePath)
 			assert.Nil(t, err)
-			assert.Equal(t, tc.contents, string(res))
+			assert.Equal(t, tc.expectedContents, string(res))
 		})
 	}
 }

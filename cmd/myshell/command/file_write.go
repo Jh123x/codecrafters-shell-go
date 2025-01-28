@@ -17,6 +17,7 @@ func AppendToFile(filePath, contents string) error {
 		}
 		return err
 	}
+
 	fd, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
