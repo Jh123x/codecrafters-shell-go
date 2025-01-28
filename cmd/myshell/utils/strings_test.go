@@ -19,6 +19,10 @@ func TestFixStrPrinting(t *testing.T) {
 			val:         "this is my \n string\n",
 			expectedRes: "this is my \r\n string\r\n",
 		},
+		"Double apply should have no effect": {
+			val:         FixStrPrinting("this is my \n string\n"),
+			expectedRes: "this is my \r\n string\r\n",
+		},
 	}
 
 	for name, tc := range tests {

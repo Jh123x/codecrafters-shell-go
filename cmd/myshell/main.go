@@ -55,6 +55,5 @@ func main() { // switch stdin into 'raw' mode
 				fmt.Print(errMsg)
 			}
 		}
-		fmt.Print("\r\n")
 	}
 }
