@@ -21,5 +21,5 @@ func Type(args []string) (string, error) {
 		return fmt.Sprintf("%s is %s\n", typeArg, absPath), nil
 	}
 
-	return "", fmt.Errorf("%s: not found", typeArg)
+	return "", fmt.Errorf("%s: not found\n", typeArg)
 }
