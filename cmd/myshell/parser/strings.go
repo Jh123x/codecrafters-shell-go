@@ -2,7 +2,6 @@ package parser
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -43,7 +42,6 @@ func parseSingleQuote(arguments string, startIdx int) (string, int, error) {
 func parseDoubleQuote(arguments string, startIdx int) (string, int, error) {
 	builder := strings.Builder{}
 	for startIdx < len(arguments) {
-		fmt.Println(startIdx, string([]byte{arguments[startIdx]}))
 		switch currByte := arguments[startIdx]; currByte {
 		case '"':
 			return builder.String(), startIdx + 1, nil
