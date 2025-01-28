@@ -23,6 +23,7 @@ func HandleCommand(command *parser.Command) (res string, err error) {
 
 func handleLink(link *parser.Link, stdout string, stderr error) (string, error) {
 	if link == nil || len(link.Args) == 0 {
+		fmt.Println("no link found")
 		return "", consts.ErrUnexpectedLinkValue
 	}
 
