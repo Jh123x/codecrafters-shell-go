@@ -14,8 +14,8 @@ const (
 )
 
 type Link struct {
-	Type          LinkType
-	LinkedCommand *Command
+	Type LinkType
+	Args []string
 }
 
 type Command struct {

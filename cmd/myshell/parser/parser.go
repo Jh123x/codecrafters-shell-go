@@ -69,23 +69,21 @@ func parseCommand(tokens []string) (*Command, error) {
 }
 
 func parseLink(linkType string, tokens []string) (*Link, error) {
-	nextCmd, err := parseCommand(tokens)
-	if err != nil {
-		return nil, err
-	}
-
+	var linkVal LinkType
 	switch linkType {
 	case ">", "1>":
-		return &Link{Type: LinkTypeStdout, LinkedCommand: nextCmd}, nil
+		linkVal = LinkTypeStdout
 	case "2>":
-		return &Link{Type: LinkTypeStderr, LinkedCommand: nextCmd}, nil
+		linkVal = LinkTypeStderr
 	case "|":
-		return &Link{Type: LinkTypePipe, LinkedCommand: nextCmd}, nil
+		linkVal = LinkTypePipe
 	case ";":
-		return &Link{Type: LinkTypeNone, LinkedCommand: nextCmd}, nil
+		linkVal = LinkTypeNone
 	default:
 		return nil, consts.ErrUnsupportedLinkType
 	}
+
+	return &Link{Type: linkVal, Args: tokens}, nil
 }
 
 func parseArguments(argument string) ([]string, error) {

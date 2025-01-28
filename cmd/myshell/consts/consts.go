@@ -4,11 +4,12 @@ import "errors"
 
 const (
 	// Commands
-	EXIT = "exit"
-	ECHO = "echo"
-	TYPE = "type"
-	PWD  = "pwd"
-	CD   = "cd"
+	EXIT    = "exit"
+	ECHO    = "echo"
+	TYPE    = "type"
+	PWD     = "pwd"
+	CD      = "cd"
+	Inspect = "inspect"
 
 	// Environment variables
 	ENV_PATH = "PATH"

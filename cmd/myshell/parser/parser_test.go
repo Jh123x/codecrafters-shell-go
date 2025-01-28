@@ -30,8 +30,8 @@ func TestParseFromReader(t *testing.T) {
 				Command: "cat",
 				Args:    []string{"test.txt"},
 				Link: &Link{
-					Type:          LinkTypeStdout,
-					LinkedCommand: &Command{Command: "test.txt"},
+					Type: LinkTypeStdout,
+					Args: []string{"test.txt"},
 				},
 			},
 		},

@@ -21,14 +21,14 @@ func HandleCommand(command *parser.Command) (res string, err error) {
 }
 
 func handleLink(link *parser.Link, stdout string, stderr error) (string, error) {
-	if link == nil || link.LinkedCommand == nil || link.LinkedCommand.Command == "" {
+	if link == nil || len(link.Args) == 0 {
 		return "", consts.ErrUnexpectedLinkValue
 	}
 
-	cmd := link.LinkedCommand
+	cmd := link.Args
 	switch link.Type {
 	case parser.LinkTypeStdout:
-		if err := WriteToFile(cmd.Command, stdout); err != nil {
+		if err := WriteToFile(cmd[0], stdout); err != nil {
 			return "", err
 		}
 		if stderr == nil {
@@ -41,7 +41,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 			return stdout, nil
 		}
 
-		if err := WriteToFile(cmd.Command, stderr.Error()); err != nil {
+		if err := WriteToFile(cmd[0], stderr.Error()); err != nil {
 			return "", err
 		}
 
@@ -64,6 +64,8 @@ func handleCommand(command *parser.Command) (string, error) {
 		return Pwd()
 	case consts.CD:
 		return ChangeDir(command.Args)
+	case consts.Inspect:
+		return Inspect(command)
 	default:
 		return DefaultCommand(command)
 	}
