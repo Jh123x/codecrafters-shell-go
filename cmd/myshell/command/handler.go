@@ -35,6 +35,17 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 			return "", nil
 		}
 		return "", stderr
+
+	case parser.LinkTypeStderr:
+		if stderr == nil {
+			return stdout, nil
+		}
+
+		if err := WriteToFile(cmd.Command, stderr.Error()); err != nil {
+			return "", err
+		}
+
+		return "", stderr
 	default:
 		fmt.Println("invalid link type")
 		return "", consts.ErrUnsupportedLinkType
