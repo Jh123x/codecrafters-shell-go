@@ -30,9 +30,11 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 	switch link.Type {
 	case parser.LinkTypeStdout:
 		if err := WriteToFile(cmd[0], stdout); err != nil {
+			fmt.Println("error while writing stdout to file", err)
 			return "", err
 		}
 		if stderr == nil {
+			fmt.Println("stderr is empty in stdout redirection flow")
 			return "", nil
 		}
 		return "", stderr
@@ -40,10 +42,12 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 	case parser.LinkTypeStderr:
 		errTxt := ""
 		if stderr != nil {
+			fmt.Println("stderr is empty in stderr redirection flow")
 			errTxt = stderr.Error()
 		}
 
 		if err := WriteToFile(cmd[0], errTxt); err != nil {
+			fmt.Println("error while writing stderr to file", err)
 			return "", err
 		}
 
@@ -54,12 +58,14 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 			return "", err
 		}
 		if stderr == nil {
+			fmt.Println("stderr is empty in stdout redirection append flow")
 			return "", nil
 		}
 		return "", stderr
 	case parser.LinkTypeAppendStderr:
 		errTxt := ""
 		if stderr != nil {
+			fmt.Println("stderr is empty in stderr redirection append flow")
 			errTxt = stderr.Error()
 		}
 
@@ -87,8 +93,12 @@ func handleCommand(command *parser.Command) (string, error) {
 		return Pwd()
 	case consts.CD:
 		return ChangeDir(command.Args)
+
+	// For debugging command struct.
 	case consts.INSPECT:
 		return Inspect(command)
+
+	// Executable files.
 	default:
 		return DefaultCommand(command)
 	}
