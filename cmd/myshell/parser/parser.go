@@ -1,23 +1,12 @@
 package parser
 
 import (
-	"bufio"
-	"io"
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 )
 
-func ParseFromReader(reader io.Reader) (*Command, error) {
-	scanner := bufio.NewScanner(reader)
-	if !scanner.Scan() {
-		return nil, scanner.Err()
-	}
-
-	return parseCommands(scanner.Text())
-}
-
-func parseCommands(command string) (*Command, error) {
+func ParseCommands(command string) (*Command, error) {
 	args, err := parseArguments(command)
 	if err != nil {
 		return nil, err

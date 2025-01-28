@@ -3,31 +3,55 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/command"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
+	"golang.org/x/term"
 )
 
-func main() {
+func main() { // switch stdin into 'raw' mode
+	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer func() {
+		if err := term.Restore(int(os.Stdin.Fd()), oldState); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	streamer := parser.NewStreamer(os.Stdin)
 	for {
-		fmt.Print("$ ")
-		cmd, err := parser.ParseFromReader(os.Stdin)
+		fmt.Print("\r$ ")
+		cmdStr, err := streamer.GetNextCommand()
 		if err != nil {
 			fmt.Println("Error reading command")
+			continue
+		}
+
+		cmd, err := parser.ParseCommands(cmdStr)
+		if err != nil {
+			fmt.Println("Error reading command")
+			continue
 		}
 
 		// Handle Command
 		output, err := command.HandleCommand(cmd)
 		if err == consts.ErrEXIT {
-			return
+			break
 		}
 
 		fmt.Print(output)
 		if err != nil {
-			fmt.Print(err.Error())
+			errMsg := err.Error()
+			if !strings.HasSuffix(errMsg, "\n") {
+				errMsg += "\n"
+			}
+			fmt.Print(errMsg)
 			continue
 		}
-
 	}
 }
