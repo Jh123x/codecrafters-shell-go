@@ -11,21 +11,29 @@ func TestParseFromReader(t *testing.T) {
 	tests := map[string]struct {
 		input string
 
-		expectedCommand string
-		expectedArgs    []string
+		expectedCommand *Command
 		expectedErr     error
 	}{
 		"test inputs": {
 			input:           "test arg1 arg2\n",
-			expectedCommand: "test",
-			expectedArgs:    []string{"arg1", "arg2"},
+			expectedCommand: NewCommand("test", []string{"arg1", "arg2"}),
 			expectedErr:     nil,
 		},
 		"test with quotes": {
 			input:           `'exe with "quotes"' file`,
-			expectedCommand: `exe with "quotes"`,
-			expectedArgs:    []string{"file"},
+			expectedCommand: NewCommand(`exe with "quotes"`, []string{"file"}),
 			expectedErr:     nil,
+		},
+		"test with write to out file": {
+			input: `cat test.txt > test.txt`,
+			expectedCommand: &Command{
+				Command: "cat",
+				Args:    []string{"test.txt"},
+				Link: &Link{
+					Type:          LinkTypeStdout,
+					LinkedCommand: &Command{Command: "test.txt"},
+				},
+			},
 		},
 	}
 
@@ -33,7 +41,7 @@ func TestParseFromReader(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			reader := strings.NewReader(tc.input)
 			cmd, err := ParseFromReader(reader)
-			assert.Equal(t, NewCommand(tc.expectedCommand, tc.expectedArgs), cmd)
+			assert.Equal(t, tc.expectedCommand, cmd)
 			assert.Equal(t, tc.expectedErr, err)
 		})
 	}

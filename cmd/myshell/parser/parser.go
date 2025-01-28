@@ -49,6 +49,7 @@ func parseCommand(tokens []string) (*Command, error) {
 			}
 
 			cmd.Link = link
+			return cmd, nil
 		default:
 			if cmd == nil {
 				cmd = &Command{}

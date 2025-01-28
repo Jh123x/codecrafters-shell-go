@@ -1,6 +1,8 @@
 package command
 
 import (
+	"fmt"
+
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
 )
@@ -34,6 +36,7 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		}
 		return "", stderr
 	default:
+		fmt.Println("invalid link type")
 		return "", consts.ErrUnsupportedLinkType
 	}
 }
