@@ -29,6 +29,19 @@ func Test_parseQuote(t *testing.T) {
 			expectedNextIdx: 17,
 			expectedErr:     nil,
 		},
+		"proper double quote": {
+			arg:             `"test"`,
+			startIdx:        0,
+			expectedRes:     "test",
+			expectedNextIdx: 6,
+			expectedErr:     nil,
+		},
+		"proper double quote example": {
+			arg:             `"hello'script'\\n'world"`,
+			startIdx:        0,
+			expectedNextIdx: 24,
+			expectedRes:     "hello'script'\\n'world",
+		},
 	}
 
 	for name, tc := range tests {
