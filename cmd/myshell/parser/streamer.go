@@ -9,22 +9,16 @@ import (
 )
 
 type Streamer struct {
-	reader         io.Reader
-	currentRecords []byte
+	reader io.Reader
 }
 
 func NewStreamer(reader io.Reader) *Streamer {
-	buffer := make([]byte, 0, 1000)
-	return &Streamer{
-		reader:         reader,
-		currentRecords: buffer,
-	}
+	return &Streamer{reader: reader}
 }
 
 func (s *Streamer) GetNextCommand() (string, error) {
 	buffer := make([]byte, 0, 100)
 	byteReader := make([]byte, 1)
-	defer func() { s.currentRecords = append(s.currentRecords, buffer...) }()
 	for {
 		if _, err := s.reader.Read(byteReader); err != nil {
 			return "", err
@@ -35,14 +29,12 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			fmt.Print("\r\n")
 			cmd := string(buffer)
 			return cmd, nil
-		case 8: // Backspace
-			fmt.Print("\x7F")
-		case 0x7f:
+		case 8: // Delete
 			if len(buffer) == 0 {
-				continue
+				break
 			}
+
 			buffer = buffer[:len(buffer)-1]
-			fmt.Print("\x7F")
 		case 0x03: // Ctrl + C
 			return consts.EXIT, nil
 		case 0x9:
@@ -57,7 +49,7 @@ func (s *Streamer) GetNextCommand() (string, error) {
 				break
 			}
 
-			remainingEst := closestEstimate[len(buffer):]
+			remainingEst := closestEstimate[len(buffer):] + " "
 			buffer = append(buffer, []byte(remainingEst)...)
 			fmt.Printf("%s", remainingEst)
 		default:
