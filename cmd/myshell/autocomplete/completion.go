@@ -33,7 +33,11 @@ func GetClosestCommands(currBuffer string) ([]string, error) {
 
 		for _, dirEntry := range dir {
 			entryName := dirEntry.Name()
-			if dirEntry.IsDir() || dirEntry.Type().Perm()&0100 == 0 {
+			if dirEntry.IsDir() {
+				continue
+			}
+
+			if stat, err := os.Stat(dirEntry.Name()); err != nil || stat.Mode().Perm()&0111 == 0 {
 				continue
 			}
 
