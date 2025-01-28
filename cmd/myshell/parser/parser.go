@@ -38,7 +38,7 @@ func parseCommand(tokens []string) (*Command, error) {
 
 	for currIdx < len(tokens) {
 		switch curr := tokens[currIdx]; curr {
-		case ">", ">>", "<<", "2>", "1>":
+		case ">", ">>", "2>>", "2>", "1>", "1>>":
 			if cmd == nil {
 				return nil, consts.ErrInvalidCommandStart
 			}
@@ -75,6 +75,10 @@ func parseLink(linkType string, tokens []string) (*Link, error) {
 		linkVal = LinkTypeStdout
 	case "2>":
 		linkVal = LinkTypeStderr
+	case ">>", "1>>":
+		linkVal = LinkTypeAppendStdout
+	case "2>>":
+		linkVal = LinkTypeAppendStderr
 	case "|":
 		linkVal = LinkTypePipe
 	case ";":

@@ -47,6 +47,25 @@ func handleLink(link *parser.Link, stdout string, stderr error) (string, error) 
 		}
 
 		return stdout, nil
+	case parser.LinkTypeAppendStdout:
+		if err := AppendToFile(cmd[0], stdout); err != nil {
+			return "", err
+		}
+		if stderr == nil {
+			return "", nil
+		}
+		return "", stderr
+	case parser.LinkTypeAppendStderr:
+		errTxt := ""
+		if stderr != nil {
+			errTxt = stderr.Error()
+		}
+
+		if err := AppendToFile(cmd[0], errTxt); err != nil {
+			return "", err
+		}
+
+		return stdout, nil
 	default:
 		fmt.Println("invalid link type")
 		return "", consts.ErrUnsupportedLinkType
