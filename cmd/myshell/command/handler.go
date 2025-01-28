@@ -1,14 +1,11 @@
 package command
 
 import (
-	"io/fs"
-	"os"
-
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
 )
 
-func HandleCommand(command *parser.Command) (string, error) {
+func HandleCommand(command *parser.Command) (res string, err error) {
 	if command == nil {
 		return "", consts.ErrEmptyCommand
 	}
@@ -22,22 +19,18 @@ func HandleCommand(command *parser.Command) (string, error) {
 }
 
 func handleLink(link *parser.Link, stdout string, stderr error) (string, error) {
-	if link == nil {
-		return "", consts.ErrNilLink
+	if link == nil || link.LinkedCommand == nil || link.LinkedCommand.Command == "" {
+		return "", consts.ErrUnexpectedLinkValue
 	}
 
-	linkCommand := link.LinkedCommand
+	cmd := link.LinkedCommand
 	switch link.Type {
 	case parser.LinkTypeStdout:
-		if linkCommand == nil || linkCommand.Command == "" || len(linkCommand.Args) > 0 {
-			return "", consts.ErrUnexpectedLinkValue
-		}
-		if err := os.WriteFile(
-			linkCommand.Command,
-			[]byte(stdout),
-			fs.FileMode(os.O_CREATE),
-		); err != nil {
+		if err := WriteToFile(cmd.Command, stdout); err != nil {
 			return "", err
+		}
+		if stderr == nil {
+			return "", nil
 		}
 		return "", stderr
 	default:
