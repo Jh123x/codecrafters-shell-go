@@ -1,13 +1,12 @@
 package parser
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseFromReader(t *testing.T) {
+func TestParseCommands(t *testing.T) {
 	tests := map[string]struct {
 		input string
 
@@ -15,7 +14,7 @@ func TestParseFromReader(t *testing.T) {
 		expectedErr     error
 	}{
 		"test inputs": {
-			input:           "test arg1 arg2\n",
+			input:           "test arg1 arg2",
 			expectedCommand: NewCommand("test", []string{"arg1", "arg2"}),
 			expectedErr:     nil,
 		},
@@ -39,8 +38,7 @@ func TestParseFromReader(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			reader := strings.NewReader(tc.input)
-			cmd, err := ParseFromReader(reader)
+			cmd, err := ParseCommands(tc.input)
 			assert.Equal(t, tc.expectedCommand, cmd)
 			assert.Equal(t, tc.expectedErr, err)
 		})
