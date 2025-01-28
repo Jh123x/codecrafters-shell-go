@@ -24,7 +24,7 @@ func TestHandler(t *testing.T) {
 			command:        "test_not_found",
 			args:           []string{"should", "be", "ignored"},
 			expectedOutput: "",
-			expectedErr:    fmt.Errorf("test_not_found: command not found\n"),
+			expectedErr:    fmt.Errorf("test_not_found: command not found"),
 		},
 		"echo": {
 			command:        consts.ECHO,

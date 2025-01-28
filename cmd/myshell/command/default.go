@@ -26,6 +26,6 @@ func DefaultCommand(command *parser.Command) (string, error) {
 func parseNotfoundError(command string) (string, error) {
 	builder := strings.Builder{}
 	builder.WriteString(command)
-	builder.WriteString(": command not found\n")
+	builder.WriteString(": command not found")
 	return "", errors.New(builder.String())
 }

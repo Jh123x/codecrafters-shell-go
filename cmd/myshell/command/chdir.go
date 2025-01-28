@@ -24,7 +24,7 @@ func ChangeDir(args []string) (string, error) {
 
 func changeDir(dir string) error {
 	if err := os.Chdir(dir); err != nil {
-		return fmt.Errorf("cd: %s: No such file or directory\n", dir)
+		return fmt.Errorf("cd: %s: No such file or directory", dir)
 	}
 
 	return nil
