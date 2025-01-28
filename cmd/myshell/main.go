@@ -22,11 +22,12 @@ func main() {
 		if err == consts.ErrEXIT {
 			return
 		}
+
+		fmt.Print(output)
 		if err != nil {
 			fmt.Print(err.Error())
 			continue
 		}
 
-		fmt.Print(output)
 	}
 }

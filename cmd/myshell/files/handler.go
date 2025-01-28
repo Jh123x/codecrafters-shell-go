@@ -1,8 +1,8 @@
 package files
 
 import (
-	"bytes"
 	"errors"
+	"io"
 	"os"
 	"os/exec"
 	"path"
@@ -48,15 +48,37 @@ func RunFile(absFilePath string, args []string) (string, error) {
 	cmd := exec.Command(absFilePath, args...)
 	cmd.Args[0] = filepath.Base(absFilePath)
 
-	var outb, errb bytes.Buffer
-	cmd.Stdout = &outb
-	cmd.Stderr = &errb
-
-	_ = cmd.Run()
-
-	if errb.Len() > 0 {
-		return "", errors.New(errb.String())
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return "", err
 	}
 
-	return outb.String(), nil
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return "", err
+	}
+
+	if err := cmd.Start(); err != nil {
+		return "", err
+	}
+
+	outB, err := io.ReadAll(stdout)
+	if err != nil {
+		return "", err
+	}
+
+	errB, err := io.ReadAll(stderr)
+	if err != nil {
+		return "", err
+	}
+
+	return string(outB), parseErrStr(string(errB))
+}
+
+func parseErrStr(errorVal string) error {
+	if len(errorVal) == 0 {
+		return nil
+	}
+
+	return errors.New(errorVal)
 }
