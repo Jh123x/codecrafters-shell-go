@@ -21,6 +21,12 @@ func TestParseFromReader(t *testing.T) {
 			expectedArgs:    []string{"arg1", "arg2"},
 			expectedErr:     nil,
 		},
+		"test with quotes": {
+			input:           `'exe with "quotes"' file`,
+			expectedCommand: `exe with "quotes"`,
+			expectedArgs:    []string{"file"},
+			expectedErr:     nil,
+		},
 	}
 
 	for name, tc := range tests {

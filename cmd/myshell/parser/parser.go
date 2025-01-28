@@ -16,20 +16,8 @@ func ParseFromReader(reader io.Reader) (string, []string, error) {
 }
 
 func parseCommand(command string) (string, []string, error) {
-	split_args := strings.SplitN(
-		strings.TrimRight(command, "\n"),
-		" ", 2,
-	)
-
-	switch len(split_args) {
-	case 0:
-		return "", nil, nil
-	case 1:
-		return split_args[0], nil, nil
-	default:
-		args, err := parseArguments(split_args[1])
-		return split_args[0], args, err
-	}
+	args, err := parseArguments(command)
+	return args[0], args[1:], err
 }
 
 func parseArguments(argument string) ([]string, error) {
