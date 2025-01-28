@@ -9,7 +9,7 @@ const (
 	TYPE    = "type"
 	PWD     = "pwd"
 	CD      = "cd"
-	Inspect = "inspect"
+	INSPECT = "inspect"
 
 	// Environment variables
 	ENV_PATH = "PATH"
@@ -20,11 +20,12 @@ type empty struct{}
 
 var (
 	TypeMap = map[string]empty{
-		EXIT: {},
-		ECHO: {},
-		TYPE: {},
-		PWD:  {},
-		CD:   {},
+		EXIT:    {},
+		ECHO:    {},
+		TYPE:    {},
+		PWD:     {},
+		CD:      {},
+		INSPECT: {},
 	}
 )
 

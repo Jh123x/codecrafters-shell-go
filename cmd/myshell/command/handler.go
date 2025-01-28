@@ -84,7 +84,7 @@ func handleCommand(command *parser.Command) (string, error) {
 		return Pwd()
 	case consts.CD:
 		return ChangeDir(command.Args)
-	case consts.Inspect:
+	case consts.INSPECT:
 		return Inspect(command)
 	default:
 		return DefaultCommand(command)
