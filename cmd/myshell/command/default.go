@@ -6,20 +6,21 @@ import (
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/files"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
 )
 
-func DefaultCommand(command string, args []string) (string, error) {
-	filePath, err := files.GetFilePath(command)
+func DefaultCommand(command *parser.Command) (string, error) {
+	filePath, err := files.GetFilePath(command.Command)
 	if err != nil {
 		switch err {
 		case consts.ErrFileNotFound:
-			return parseNotfoundError(command)
+			return parseNotfoundError(command.Command)
 		default:
 			return "", err
 		}
 	}
 
-	return files.RunFile(filePath, args)
+	return files.RunFile(filePath, command.Args)
 }
 
 func parseNotfoundError(command string) (string, error) {

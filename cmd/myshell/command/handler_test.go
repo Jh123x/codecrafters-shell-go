@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -60,7 +61,7 @@ func TestHandler(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			output, err := HandleCommand(tc.command, tc.args)
+			output, err := HandleCommand(parser.NewCommand(tc.command, tc.args))
 
 			assert.Equal(t, tc.expectedOutput, output)
 			assert.Equal(t, tc.expectedErr, err)

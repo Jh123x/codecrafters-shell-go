@@ -32,9 +32,8 @@ func TestParseFromReader(t *testing.T) {
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
 			reader := strings.NewReader(tc.input)
-			cmd, arg, err := ParseFromReader(reader)
-			assert.Equal(t, tc.expectedCommand, cmd)
-			assert.Equal(t, tc.expectedArgs, arg)
+			cmd, err := ParseFromReader(reader)
+			assert.Equal(t, NewCommand(tc.expectedCommand, tc.expectedArgs), cmd)
 			assert.Equal(t, tc.expectedErr, err)
 		})
 	}
@@ -107,7 +106,7 @@ func Test_parseArguments(t *testing.T) {
 		"quote test 2": {
 			argStr: "\"/tmp/baz/f\\n9\" \"/tmp/baz/f\\42\" \"/tmp/baz/f'\\'62\"",
 			expectedArgs: []string{
-				"/tmp/baz/f\n9",
+				"/tmp/baz/f\\n9",
 				"/tmp/baz/f\\42",
 				"/tmp/baz/f'\\'62",
 			},

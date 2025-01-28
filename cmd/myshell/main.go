@@ -12,13 +12,13 @@ import (
 func main() {
 	for {
 		fmt.Print("$ ")
-		cmd, args, err := parser.ParseFromReader(os.Stdin)
+		cmd, err := parser.ParseFromReader(os.Stdin)
 		if err != nil {
 			fmt.Println("Error reading command")
 		}
 
 		// Handle Command
-		output, err := command.HandleCommand(cmd, args)
+		output, err := command.HandleCommand(cmd)
 		if err == consts.ErrEXIT {
 			return
 		}

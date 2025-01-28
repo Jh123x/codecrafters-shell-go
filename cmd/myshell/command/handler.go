@@ -1,20 +1,23 @@
 package command
 
-import "github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
+import (
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/parser"
+)
 
-func HandleCommand(command string, args []string) (string, error) {
-	switch command {
+func HandleCommand(command *parser.Command) (string, error) {
+	switch command.Command {
 	case consts.ECHO:
-		return Echo(args)
+		return Echo(command.Args)
 	case consts.EXIT:
-		return Exit(args)
+		return Exit(command.Args)
 	case consts.TYPE:
-		return Type(args)
+		return Type(command.Args)
 	case consts.PWD:
 		return Pwd()
 	case consts.CD:
-		return ChangeDir(args)
+		return ChangeDir(command.Args)
 	default:
-		return DefaultCommand(command, args)
+		return DefaultCommand(command)
 	}
 }

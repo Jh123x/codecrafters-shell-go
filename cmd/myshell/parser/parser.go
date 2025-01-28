@@ -6,18 +6,31 @@ import (
 	"strings"
 )
 
-func ParseFromReader(reader io.Reader) (string, []string, error) {
+func ParseFromReader(reader io.Reader) (*Command, error) {
 	scanner := bufio.NewScanner(reader)
 	if !scanner.Scan() {
-		return "", nil, scanner.Err()
+		return nil, scanner.Err()
 	}
 
-	return parseCommand(scanner.Text())
+	return parseCommands(scanner.Text())
 }
 
-func parseCommand(command string) (string, []string, error) {
+func parseCommands(command string) (*Command, error) {
 	args, err := parseArguments(command)
-	return args[0], args[1:], err
+	cmdBuilder := &Command{}
+	for _, arg := range args {
+		if cmdBuilder.Command == "" {
+			cmdBuilder.Command = arg
+			continue
+		}
+
+		switch arg {
+		default:
+			cmdBuilder.Args = append(cmdBuilder.Args, arg)
+		}
+	}
+
+	return cmdBuilder, err
 }
 
 func parseArguments(argument string) ([]string, error) {
