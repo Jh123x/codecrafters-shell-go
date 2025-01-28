@@ -68,8 +68,6 @@ func parseEscape(arguments string, startIdx int) (string, int, error) {
 	}
 
 	switch currByte := arguments[startIdx]; currByte {
-	case 'n':
-		return "\n", startIdx, nil
 	case '\\':
 		return "\\", startIdx, nil
 	case '$':
