@@ -23,7 +23,7 @@ func main() {
 			return
 		}
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Print(err.Error())
 			continue
 		}
 
