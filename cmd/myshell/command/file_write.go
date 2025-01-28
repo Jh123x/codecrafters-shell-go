@@ -1,7 +1,6 @@
 package command
 
 import (
-	"errors"
 	"io/fs"
 	"os"
 )
@@ -12,7 +11,7 @@ func WriteToFile(filePath, contents string) error {
 
 func AppendToFile(filePath, contents string) error {
 	if _, err := os.Stat(filePath); err != nil {
-		if errors.Is(err, os.ErrNotExist) {
+		if os.IsNotExist(err) {
 			return WriteToFile(filePath, contents)
 		}
 		return err
