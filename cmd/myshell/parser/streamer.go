@@ -47,6 +47,7 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			}
 
 			if len(closestEstimate) < len(currStr) {
+				fmt.Printf("\a") // Ring bell
 				break
 			}
 
