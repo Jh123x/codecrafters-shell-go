@@ -50,9 +50,6 @@ func main() { // switch stdin into 'raw' mode
 
 		if err != nil {
 			if errMsg := err.Error(); len(errMsg) > 0 {
-				if !strings.HasSuffix(errMsg, "\n") {
-					errMsg += "\n"
-				}
 				fmt.Printf("%s", strings.ReplaceAll(errMsg, "\n", "\r\n"))
 			}
 		}
