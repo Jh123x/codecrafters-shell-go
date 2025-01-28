@@ -102,8 +102,8 @@ func Test_parseArguments(t *testing.T) {
 			argStr: "\"/tmp/baz/f\\n9\" \"/tmp/baz/f\\42\" \"/tmp/baz/f'\\'62\"",
 			expectedArgs: []string{
 				"/tmp/baz/f\n9",
-				`/tmp/baz/f\42`,
-				`/tmp/baz/f'\'62`,
+				"/tmp/baz/f\\42",
+				"/tmp/baz/f'\\'62",
 			},
 		},
 	}
