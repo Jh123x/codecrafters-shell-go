@@ -46,13 +46,17 @@ func main() { // switch stdin into 'raw' mode
 		}
 
 		if len(output) > 0 {
-			fmt.Print(output)
+			fmt.Print(fixStrPrinting(output))
 		}
 
 		if err != nil {
 			if errMsg := err.Error(); len(errMsg) > 0 {
-				fmt.Print(errMsg, "\r\n", strings.Repeat("\b", len(errMsg)))
+				fmt.Print(fixStrPrinting(errMsg))
 			}
 		}
 	}
+}
+
+func fixStrPrinting(val string) string {
+	return strings.ReplaceAll(strings.ReplaceAll(val, "\r\n", "\n"), "\n", "\r\n") + "\r\n"
 }

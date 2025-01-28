@@ -52,7 +52,6 @@ func (s *Streamer) GetNextCommand() (string, error) {
 
 			if isTab {
 				buffer = []byte(autocomplete.GetCommonPrefix(currSuggestions))
-				fmt.Printf("\r\nfound common prefix: '%s'\r\n", string(buffer))
 				fmt.Printf("\r\n%s\r\n$ %s", strings.Join(currSuggestions, " "), string(buffer))
 				isTab = false
 				continue

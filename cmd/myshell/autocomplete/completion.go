@@ -33,7 +33,11 @@ func GetClosestCommands(currBuffer string) ([]string, error) {
 
 		for _, dirEntry := range dir {
 			entryName := dirEntry.Name()
-			if !dirEntry.IsDir() && len(entryName) >= len(currBuffer) && strings.HasPrefix(entryName, currBuffer) {
+			if dirEntry.IsDir() || dirEntry.Type().Perm()&0100 == 0 {
+				continue
+			}
+
+			if len(entryName) >= len(currBuffer) && strings.HasPrefix(entryName, currBuffer) {
 				foundCommands[entryName] = struct{}{}
 			}
 		}
