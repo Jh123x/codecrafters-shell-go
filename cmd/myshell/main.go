@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/command"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
@@ -24,7 +25,7 @@ func main() { // switch stdin into 'raw' mode
 
 	streamer := parser.NewStreamer(os.Stdin)
 	for {
-		fmt.Print("\r$ ")
+		fmt.Print("$ ")
 		cmdStr, err := streamer.GetNextCommand()
 		if err != nil {
 			fmt.Println("Error reading command")
@@ -44,11 +45,11 @@ func main() { // switch stdin into 'raw' mode
 		}
 
 		if len(output) > 0 {
-			fmt.Printf("\r%s", output)
+			fmt.Printf("\r%s", strings.ReplaceAll(output, "\n", "\r\n"))
 		}
 
 		if err != nil {
-			fmt.Printf("\r%s", err.Error())
+			fmt.Printf("\r%s", strings.ReplaceAll(err.Error(), "\n", "\r\n"))
 			continue
 		}
 	}
