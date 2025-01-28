@@ -98,6 +98,14 @@ func Test_parseArguments(t *testing.T) {
 				`/tmp/baz/'f \83\'`,
 			},
 		},
+		"quote test 2": {
+			argStr: "\"/tmp/baz/f\\n9\" \"/tmp/baz/f\\42\" \"/tmp/baz/f'\\'62\"",
+			expectedArgs: []string{
+				"/tmp/baz/f\n9",
+				`/tmp/baz/f\42`,
+				`/tmp/baz/f'\'62`,
+			},
+		},
 	}
 
 	for name, tc := range tests {
