@@ -30,66 +30,52 @@ func HandleCommand(command *parser.Command) (string, error) {
 }
 
 func handleLink(link *parser.Link, stdout string, stderr error) (string, error) {
-	if link == nil || len(link.Args) == 0 {
-		//fmt.Println("no link found")
+	if link == nil || len(link.Args) != 1 {
 		return "", consts.ErrUnexpectedLinkValue
 	}
 
-	cmd := link.Args
+	fileName := link.Args[0]
 	switch link.Type {
 	case parser.LinkTypeStdout:
-		//fmt.Println("type stdout write file")
-		if err := WriteToFile(cmd[0], stdout); err != nil {
-			//fmt.Println("error while writing stdout to file", err)
+		if err := WriteToFile(fileName, stdout); err != nil {
 			return "", err
 		}
 		if stderr == nil {
-			//fmt.Println("stderr is empty in stdout redirection flow")
 			return "", nil
 		}
 		return "", stderr
 
 	case parser.LinkTypeStderr:
-		//fmt.Println("type stderr write file")
 		errTxt := ""
 		if stderr != nil {
-			//fmt.Println("stderr is empty in stderr redirection flow")
 			errTxt = stderr.Error()
 		}
 
-		if err := WriteToFile(cmd[0], errTxt); err != nil {
-			//fmt.Println("error while writing stderr to file", err)
+		if err := WriteToFile(fileName, errTxt); err != nil {
 			return "", err
 		}
 
 		return stdout, nil
 	case parser.LinkTypeAppendStdout:
-		//fmt.Println("type stdout append file")
-		if err := AppendToFile(cmd[0], stdout); err != nil {
-			//fmt.Println("error while appending to file", err)
+		if err := AppendToFile(fileName, stdout); err != nil {
 			return "", err
 		}
 		if stderr == nil {
-			//fmt.Println("stderr is empty in stdout redirection append flow")
 			return "", nil
 		}
 		return "", stderr
 	case parser.LinkTypeAppendStderr:
-		//fmt.Println("type stderr append file")
 		errTxt := ""
 		if stderr != nil {
-			//fmt.Println("stderr is empty in stderr redirection append flow")
 			errTxt = stderr.Error()
 		}
 
-		if err := AppendToFile(cmd[0], errTxt); err != nil {
-			//fmt.Println("error while appending to file", err)
+		if err := AppendToFile(fileName, errTxt); err != nil {
 			return "", err
 		}
 
 		return stdout, nil
 	default:
-		//fmt.Println("invalid link type")
 		return "", consts.ErrUnsupportedLinkType
 	}
 }

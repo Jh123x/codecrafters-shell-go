@@ -1,21 +1,17 @@
 package command
 
 import (
-	"io/fs"
 	"os"
-	"path/filepath"
 )
 
+const filePerm = 0644
+
 func WriteToFile(filePath, contents string) error {
-	return os.WriteFile(filePath, []byte(contents), fs.ModePerm)
+	return os.WriteFile(filePath, []byte(contents), filePerm)
 }
 
 func AppendToFile(filePath, contents string) error {
-	if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
-		return err
-	}
-
-	fd, err := os.OpenFile(filePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	fd, err := os.OpenFile(filePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, filePerm)
 	if err != nil {
 		return err
 	}
