@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"strings"
@@ -10,25 +11,25 @@ import (
 )
 
 type Streamer struct {
-	reader io.Reader
+	reader *bufio.Reader
 }
 
 func NewStreamer(reader io.Reader) *Streamer {
-	return &Streamer{reader: reader}
+	return &Streamer{reader: bufio.NewReaderSize(reader, 1)}
 }
 
 func (s *Streamer) GetNextCommand() (string, error) {
 	buffer := make([]byte, 0, 100)
-	byteReader := make([]byte, 1)
 	isTab := false
 	currSuggestions := ([]string)(nil)
 
 	for {
-		if _, err := s.reader.Read(byteReader); err != nil {
+		currByte, err := s.reader.ReadByte()
+		if err != nil {
 			return "", err
 		}
 
-		switch currByte := byteReader[0]; currByte {
+		switch currByte {
 		case 13: // Newline
 			return string(buffer), nil
 		case 0x7f: // Delete
