@@ -48,12 +48,15 @@ func main() { // switch stdin into 'raw' mode
 
 		if len(output) > 0 {
 			fmt.Print(output)
+			continue
 		}
 
-		if err != nil {
-			if errMsg := err.Error(); len(errMsg) > 0 {
-				fmt.Print(errMsg)
-			}
+		if err == nil {
+			continue
+		}
+
+		if errMsg := err.Error(); len(errMsg) > 0 {
+			fmt.Print(errMsg)
 		}
 	}
 }
