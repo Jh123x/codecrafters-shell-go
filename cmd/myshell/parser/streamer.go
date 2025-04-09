@@ -30,7 +30,7 @@ func (s *Streamer) GetNextCommand() (string, error) {
 		}
 
 		switch currByte {
-		case 13: // Newline
+		case 10, 13: // Newline
 			return string(buffer), nil
 		case 0x7f: // Delete
 			if len(buffer) == 0 {
