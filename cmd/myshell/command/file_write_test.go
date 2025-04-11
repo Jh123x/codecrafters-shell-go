@@ -63,7 +63,6 @@ func TestAppendToFile(t *testing.T) {
 		"file which exists": {
 			setUp: func(t *testing.T) {
 				path := filepath.Join(tmpDir, "exists.txt")
-				fmt.Println(path)
 				assert.Nil(t, os.WriteFile(path, []byte("some other append data\n"), 0644))
 			},
 			filePath:         filepath.Join(tmpDir, "exists.txt"),

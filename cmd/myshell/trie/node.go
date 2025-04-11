@@ -3,13 +3,13 @@ package trie
 import "fmt"
 
 type Node struct {
-	next   map[byte]*Node
+	next   [255]*Node
 	hasVal bool
 }
 
 func NewNode() *Node {
 	return &Node{
-		next:   make(map[byte]*Node, 26),
+		next:   [255]*Node{},
 		hasVal: false,
 	}
 }
@@ -21,7 +21,7 @@ func (n *Node) Print() {
 			continue
 		}
 
-		fmt.Printf("%s(%v):", string(letter), node.hasVal)
+		fmt.Printf("%s(%v):", string(byte(letter)), node.hasVal)
 		node.Print()
 	}
 	fmt.Print("}")
@@ -34,7 +34,7 @@ func (n *Node) AddWord(letters string) {
 	}
 
 	start := letters[0]
-	if _, ok := n.next[start]; !ok {
+	if node := n.next[start]; node == nil {
 		n.next[start] = NewNode()
 	}
 
@@ -47,7 +47,7 @@ func (n *Node) HasWord(letters string) bool {
 	}
 
 	start := letters[0]
-	if _, ok := n.next[start]; !ok {
+	if node := n.next[start]; node == nil {
 		return false
 	}
 
@@ -60,7 +60,7 @@ func (n *Node) GetPrefixWords(prefix string) []string {
 	}
 
 	start := prefix[0]
-	if _, ok := n.next[start]; !ok {
+	if node := n.next[start]; node == nil {
 		return []string{}
 	}
 
@@ -80,7 +80,7 @@ func (n *Node) GetAllWords() []string {
 		}
 
 		for _, word := range nodeVal.GetAllWords() {
-			acc = append(acc, string(letter)+word)
+			acc = append(acc, string(byte(letter))+word)
 		}
 	}
 

@@ -26,6 +26,7 @@ func (t *Trie) HasWord(word string) bool {
 func (t *Trie) GetCompletion(prefix string) []string {
 	values := t.head.GetPrefixWords(prefix)
 	acc := make([]string, 0, len(values))
+
 	for _, v := range values {
 		acc = append(acc, prefix+v)
 	}

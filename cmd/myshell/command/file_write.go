@@ -13,7 +13,7 @@ func WriteToFile(filePath, contents string) error {
 func AppendToFile(filePath, contents string) error {
 	fd, err := os.OpenFile(filePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, filePerm)
 	if err != nil {
-		return err
+		return WriteToFile(filePath, contents)
 	}
 
 	defer fd.Close()
