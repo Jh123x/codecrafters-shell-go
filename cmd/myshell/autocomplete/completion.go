@@ -1,7 +1,9 @@
 package autocomplete
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
@@ -25,6 +27,7 @@ func init() {
 	for _, envPath := range strings.Split(envPaths, ":") {
 		dir, err := os.ReadDir(envPath)
 		if err != nil {
+			fmt.Println(err.Error())
 			return
 		}
 
@@ -34,7 +37,9 @@ func init() {
 				continue
 			}
 
-			if stat, err := os.Stat(dirEntry.Name()); err != nil || stat.Mode().Perm()&0111 == 0 {
+			absPath := filepath.Join(envPath, dirEntry.Name())
+			if _, err := os.Stat(absPath); err != nil {
+				fmt.Println("skipped", absPath, err.Error())
 				continue
 			}
 
