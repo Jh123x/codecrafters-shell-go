@@ -24,6 +24,7 @@ func (s *Streamer) GetNextCommand() (string, error) {
 	var currSuggestions []string
 
 	for {
+		// fmt.Printf("\r\n%s\r\n", string(buffer))
 		currByte, err := s.reader.ReadByte()
 		if err != nil {
 			return "", err
@@ -50,7 +51,6 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			}
 
 			if isTab {
-				buffer = []byte(autocomplete.GetCommonPrefix(currSuggestions))
 				fmt.Printf("\r\n%s\r\n$ %s", strings.Join(currSuggestions, "  "), string(buffer))
 				isTab = false
 				continue
@@ -66,10 +66,19 @@ func (s *Streamer) GetNextCommand() (string, error) {
 				isTab = true
 				currSuggestions = closestEstimates
 				fmt.Printf("\a")
+
+				sharedPrefix := autocomplete.GetCommonPrefix(currSuggestions)
+				if len(sharedPrefix) > len(buffer) {
+					extraStr := sharedPrefix[len(buffer):]
+					buffer = append(buffer, []byte(extraStr)...)
+					fmt.Print(extraStr)
+				}
+				continue
 			}
 
 			closestEstimate := closestEstimates[0]
 			remainingEst := closestEstimate[len(buffer):]
+
 			buffer = append(buffer, []byte(remainingEst)...)
 			fmt.Printf("%s", remainingEst)
 		default:
