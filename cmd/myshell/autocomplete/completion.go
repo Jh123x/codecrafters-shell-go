@@ -27,12 +27,14 @@ func init() {
 	for _, envPath := range strings.Split(envPaths, ":") {
 		dir, err := os.ReadDir(envPath)
 		if err != nil {
-			fmt.Println(err.Error())
 			return
 		}
 
 		for _, dirEntry := range dir {
 			entryName := dirEntry.Name()
+			if strings.Contains(entryName, ".") {
+				continue
+			}
 			if dirEntry.IsDir() {
 				continue
 			}
