@@ -21,7 +21,6 @@ func NewStreamer(reader io.Reader) *Streamer {
 func (s *Streamer) GetNextCommand() (string, error) {
 	buffer := make([]byte, 0, 100)
 	isTab := false
-	var currSuggestions []string
 
 	for {
 		currByte, err := s.reader.ReadByte()
@@ -72,15 +71,14 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			return consts.EXIT, nil
 		case 0x9:
 			// Autocomplete logic
-			currStr := string(buffer)
-			closestEstimates, err := autocomplete.GetClosestCommands(currStr)
+			closestEstimates, err := autocomplete.GetClosestCommands(string(buffer))
 			if err != nil {
 				fmt.Println("Error in command hit")
 				return "", err
 			}
 
 			if isTab {
-				fmt.Printf("\r\n%s\r\n$ %s", strings.Join(currSuggestions, "  "), string(buffer))
+				fmt.Printf("\r\n%s\r\n$ %s", strings.Join(closestEstimates, "  "), string(buffer))
 				isTab = false
 				continue
 			}
@@ -93,14 +91,13 @@ func (s *Streamer) GetNextCommand() (string, error) {
 				break
 			default:
 				isTab = true
-				currSuggestions = closestEstimates
 				fmt.Printf("\a")
 
-				sharedPrefix := autocomplete.GetCommonPrefix(currSuggestions)
-				if len(sharedPrefix) > len(buffer) {
+				if sharedPrefix := autocomplete.GetCommonPrefix(closestEstimates); len(sharedPrefix) > len(buffer) {
 					extraStr := sharedPrefix[len(buffer):]
 					buffer = append(buffer, []byte(extraStr)...)
 					fmt.Print(extraStr)
+					isTab = false
 				}
 				continue
 			}
@@ -111,7 +108,6 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			buffer = append(buffer, []byte(remainingEst)...)
 			fmt.Printf("%s", remainingEst)
 		default:
-			// fmt.Println(int(currByte), "\r")
 			buffer = append(buffer, currByte)
 			fmt.Print(string(currByte))
 		}
