@@ -66,7 +66,6 @@ func (s *Streamer) GetNextCommand() (string, error) {
 				isTab = true
 				currSuggestions = closestEstimates
 				fmt.Printf("\a")
-				continue
 			}
 
 			closestEstimate := closestEstimates[0]
