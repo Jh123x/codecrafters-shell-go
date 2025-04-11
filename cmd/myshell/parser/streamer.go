@@ -103,10 +103,10 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			}
 
 			closestEstimate := closestEstimates[0]
-			remainingEst := closestEstimate[len(buffer):]
+			remainingEst := closestEstimate[len(buffer):] + " "
 
 			buffer = append(buffer, []byte(remainingEst)...)
-			fmt.Printf("%s ", remainingEst)
+			fmt.Printf("%s", remainingEst)
 		default:
 			buffer = append(buffer, currByte)
 			fmt.Print(string(currByte))
