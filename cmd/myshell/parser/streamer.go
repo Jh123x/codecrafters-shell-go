@@ -21,7 +21,7 @@ func NewStreamer(reader io.Reader) *Streamer {
 func (s *Streamer) GetNextCommand() (string, error) {
 	buffer := make([]byte, 0, 100)
 	isTab := false
-	currSuggestions := ([]string)(nil)
+	var currSuggestions []string
 
 	for {
 		currByte, err := s.reader.ReadByte()

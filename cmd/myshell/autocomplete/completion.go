@@ -5,30 +5,27 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/consts"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/trie"
 )
 
-func GetClosestCommands(currBuffer string) ([]string, error) {
-	foundCommands := make(map[string]struct{}, 10)
-	// Search from builtins.
-	for fn := range consts.TypeMap {
-		if len(fn) >= len(currBuffer) && strings.HasPrefix(fn, currBuffer) {
-			foundCommands[fn] = struct{}{}
-		}
+var autoComplete *trie.Trie
+
+func init() {
+	if autoComplete != nil {
+		return
+	}
+	autoComplete = trie.NewTrie()
+
+	for v := range consts.TypeMap {
+		autoComplete.AddWords(v)
 	}
 
 	// Search from path env
 	envPaths := os.Getenv(consts.ENV_PATH)
-	if len(envPaths) == 0 {
-		return getKeys(foundCommands), nil
-	}
-
 	for _, envPath := range strings.Split(envPaths, ":") {
 		dir, err := os.ReadDir(envPath)
 		if err != nil {
-			if os.IsNotExist(err) {
-				continue
-			}
-			return nil, err
+			return
 		}
 
 		for _, dirEntry := range dir {
@@ -41,23 +38,13 @@ func GetClosestCommands(currBuffer string) ([]string, error) {
 				continue
 			}
 
-			if len(entryName) >= len(currBuffer) && strings.HasPrefix(entryName, currBuffer) {
-				foundCommands[entryName] = struct{}{}
-			}
+			autoComplete.AddWords(entryName)
 		}
 	}
-
-	return getKeys(foundCommands), nil
 }
 
-func getKeys(v map[string]struct{}) []string {
-	acc := make([]string, 0, len(v))
-
-	for name := range v {
-		acc = append(acc, name)
-	}
-
-	return acc
+func GetClosestCommands(currBuffer string) ([]string, error) {
+	return autoComplete.GetCompletion(currBuffer), nil
 }
 
 func GetCommonPrefix(commands []string) string {
