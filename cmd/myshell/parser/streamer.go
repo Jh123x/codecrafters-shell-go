@@ -24,13 +24,42 @@ func (s *Streamer) GetNextCommand() (string, error) {
 	var currSuggestions []string
 
 	for {
-		// fmt.Printf("\r\n%s\r\n", string(buffer))
 		currByte, err := s.reader.ReadByte()
 		if err != nil {
 			return "", err
 		}
 
 		switch currByte {
+		case 27: // Disable arrow keys
+			currByte, err := s.reader.ReadByte()
+			if err != nil {
+				return "", err
+			}
+
+			switch currByte {
+			case 91:
+				currByte, err = s.reader.ReadByte()
+				if err != nil {
+					return "", err
+				}
+
+				switch currByte {
+				case 65:
+					// fmt.Println("up")
+				case 66:
+					// fmt.Println("down")
+				case 67:
+					// fmt.Println("right")
+				case 68:
+					// fmt.Println("left")
+				default:
+				}
+
+			default:
+				// fmt.Println(int(currByte))
+			}
+
+			continue
 		case 10, 13: // Newline
 			return string(buffer), nil
 		case 0x7f: // Delete
@@ -82,6 +111,7 @@ func (s *Streamer) GetNextCommand() (string, error) {
 			buffer = append(buffer, []byte(remainingEst)...)
 			fmt.Printf("%s", remainingEst)
 		default:
+			// fmt.Println(int(currByte), "\r")
 			buffer = append(buffer, currByte)
 			fmt.Print(string(currByte))
 		}
